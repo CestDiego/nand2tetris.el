@@ -35,7 +35,9 @@
   "Keymap for `nand2tetris-mode'."
   )
 
-(define-derived-mode nand2tetris-mode prog-mode "nand2tetris"
+(define-derived-mode nand2tetris-mode prog-mode
+  "nand2tetris"
+  "Major mode for editing HDL files for the course Nand2Tetris"
   :syntax-table nand2tetris-mode-syntax-table
   (font-lock-fontify-buffer))
 
