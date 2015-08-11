@@ -36,13 +36,17 @@
     map)
   "Keymap for `nand2tetris-mode'.")
 
+
+;;; Font-lock and syntax
 (defvar nand2tetris-font-lock-keywords
   ;;Keywords
   `(,(rx symbol-start
-         (or "CHIP" "IN" "OUT" "PARTS")
+         (or "CHIP")
          symbol-end)
+    (,(rx symbol-start (group (or "IN" "OUT" "PARTS" "BUILTIN" "CLOCKED")))
+     (1 font-lock-variable-name-face))
     ;; CHIP <ChipName>
-    (,(rx symbol-start "CHIP" (1+ space) (group (1+ (or word ?_))))
+    (,(rx symbol-start (or "CHIP" "BUILTIN") (1+ space) (group (1+ (or word ?_))))
      (1 font-lock-type-face))
     ;; <ChipName> (in=in, out=out);
     (,(rx symbol-start (group (1+ (or word ?_)))
