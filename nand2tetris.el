@@ -19,6 +19,7 @@
 ;; Useful functions to make following the coursera course easier.
 
 ;;; Code:
+(require 'cc-mode)
 
 (defvar nand2tetris-source-dir nil
   "Source directory where nadn2tetris has been downloaded")
