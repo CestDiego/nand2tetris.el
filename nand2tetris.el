@@ -67,6 +67,7 @@
 
 (defun nand2tetris/tests-current-hdl ()
   (interactive)
+  (save-buffer)
   (shell-command (concat
                   nand2tetris-hardware-simulator " "
                   (nand2tetris/get-current-tst-file))))
