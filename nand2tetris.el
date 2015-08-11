@@ -32,18 +32,18 @@
     ;;Compile
     (define-key map "\C-c\C-c" 'nand2tetris-)
     map)
-  "Keymap for `nand2tetris-mode'."
-  )
+  "Keymap for `nand2tetris-mode'.")
+
 
 (define-derived-mode nand2tetris-mode prog-mode
   "nand2tetris"
-  "Major mode for editing HDL files for the course Nand2Tetris"
-  :syntax-table nand2tetris-mode-syntax-table
-  (font-lock-fontify-buffer))
+  "Major mode for editing HDL files for the course Nand2Tetris.
+
+\\{nand2tetris-mode-map}"
+
 
 (add-to-list 'auto-mode-alist
-             `(, (concat
-                 (expand-file-name nand2tetris-source-dir)
-                 "\.*\\.hdl") . nand2tetris-mode))
+             `(,(concat (expand-file-name nand2tetris-source-dir) "\.*\\.hdl")
+               . nand2tetris-mode))
 
 (provide 'nand2tetris)
