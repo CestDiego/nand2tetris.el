@@ -34,6 +34,18 @@
     map)
   "Keymap for `nand2tetris-mode'.")
 
+(defvar nand2tetris-font-lock-keywords
+  ;;Keywords
+  `(,(rx symbol-start
+         (or "CHIP" "IN" "OUT" "PARTS")
+         symbol-end)
+    ;; CHIP <ChipName>
+    (,(rx symbol-start "CHIP" (1+ space) (group (1+ (or word ?_))))
+     (1 font-lock-type-face))
+    ;; <ChipName> (in=in, out=out);
+    (,(rx symbol-start (group (1+ (or word ?_)))
+          (? space) (seq "(" (0+ not-newline) ")"))
+     (1 font-lock-variable-name-face))))
 
 (define-derived-mode nand2tetris-mode prog-mode
   "nand2tetris"
@@ -41,6 +53,8 @@
 
 \\{nand2tetris-mode-map}"
 
+  (set (make-local-variable 'font-lock-defaults)
+       '(nand2tetris-font-lock-keywords nil nil nil nil)))
 
 (add-to-list 'auto-mode-alist
              `(,(concat (expand-file-name nand2tetris-source-dir) "\.*\\.hdl")
