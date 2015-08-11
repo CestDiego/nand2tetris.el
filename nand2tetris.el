@@ -35,30 +35,30 @@
   (expand-file-name "tools" nand2tetris-source-dir))
 
 (setq
- HardwareSimulator (expand-file-name "HardwareSimulator.sh" nand2tetris-tools-dir)
- Assembler (expand-file-name "Assembler.sh" nand2tetris-tools-dir)
- CPUEmulator (expand-file-name "CPUEmulator.sh" nand2tetris-tools-dir)
- JackCompiler (expand-file-name "JackCompiler.sh" nand2tetris-tools-dir)
- TextComparer (expand-file-name "TextComparer.sh" nand2tetris-tools-dir)
- VMEmulator (expand-file-name "VMEmulator.sh" nand2tetris-tools-dir))
+ nand2tetris-hardware-simulator (expand-file-name "HardwareSimulator.sh" nand2tetris-tools-dir)
+ nand2tetris-assembler (expand-file-name "Assembler.sh" nand2tetris-tools-dir)
+ nand2tetris-cpu-emulator (expand-file-name "CPUEmulator.sh" nand2tetris-tools-dir)
+ nand2tetris-jack-compiler (expand-file-name "JackCompiler.sh" nand2tetris-tools-dir)
+ nand2tetris-text-comparer (expand-file-name "TextComparer.sh" nand2tetris-tools-dir)
+ nand2tetris-vm-emulator (expand-file-name "VMEmulator.sh" nand2tetris-tools-dir))
 
-(defun nand2tetris-hardware-simulator ()
-  (shell-command HardwareSimulator))
+(defun nand2tetris/hardware-simulator ()
+  (shell-command nand2tetris-hardware-simulator))
 
-(defun nand2tetris-assembler ()
-  (shell-command Assembler))
+(defun nand2tetris/assembler ()
+  (shell-command nand2tetris-assembler))
 
-(defun nand2tetris-cpu-emulator ()
-  (shell-command CPUEmulator))
+(defun nand2tetris/cpu-emulator ()
+  (shell-command nand2tetris-cpu-emulator))
 
-(defun nand2tetris-jack-compiler ()
-  (shell-command JackCompiler))
+(defun nand2tetris/jack-compiler ()
+  (shell-command nand2tetris-jack-compiler))
 
-(defun nand2tetris-text-comparer ()
-  (shell-command TextComparer))
+(defun nand2tetris/text-comparer ()
+  (shell-command nand2tetris-text-comparer))
 
-(defun nand2tetris-vm-emulator ()
-  (shell-command VMEmulator))
+(defun nand2tetris/vm-emulator ()
+  (shell-command nand2tetris-vm-emulator))
 
 (defun nand2tetris/get-current-tst-file ()
   (concat
@@ -68,7 +68,7 @@
 (defun nand2tetris/tests-current-hdl ()
   (interactive)
   (shell-command (concat
-                  HardwareSimulator " "
+                  nand2tetris-hardware-simulator " "
                   (nand2tetris/get-current-tst-file))))
 
 
