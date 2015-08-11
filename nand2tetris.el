@@ -1,4 +1,5 @@
-;;; nand2tetris.el --- Major Mode for HDL files in the Nand2Tetris Course https://www.coursera.org/course/nand2tetris1
+;;; nand2tetris.el --- Major Mode for HDL files in the Nand2Tetris Course
+;;; https://www.coursera.org/course/nand2tetris1
 
 ;; Copyright (C) 2015 Diego Berrocal
 
