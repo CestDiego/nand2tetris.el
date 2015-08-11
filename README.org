@@ -3,3 +3,22 @@
 
 The aim of this package is to be best emacs tool to accompany you on your
 nand2tetris journey [[https://www.coursera.org/course/nand2tetris1][in Coursera]], or the [[http://www.nand2tetris.org][Official Website for it]].
+
+
+
+** Goodies
+
+Using =C-c C-c= will call =nand2tetris/tests-current-hdl= which is the same as
+running:
+
+#+begin_src sh
+    HardwareSimulator.sh FILE.tst    Starts the Hardware Simulator and runs the
+                                     FILE.tst test script.  The success/failure
+                                     message is printed to the command console.
+#+end_src
+
+And printing the result in the modeline, it looks like this:
+
+[[file:img/test-current-hdl.png]]
+
+ 
