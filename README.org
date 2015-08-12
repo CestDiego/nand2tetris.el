@@ -8,7 +8,7 @@ nand2tetris journey [[https://www.coursera.org/course/nand2tetris1][in Coursera]
 
 ** Goodies
 
-Using =C-c C-c= will call =nand2tetris/tests-current-hdl= which is the same as
+Using =C-c C-c= will call =nand2tetris/tests-current-hdl-elsewhere= which is the same as
 running:
 
 #+begin_src sh
@@ -22,3 +22,13 @@ And printing the result in the modeline, it looks like this:
 [[file:img/test-current-hdl.png]]
 
  
+
+** Todo
+- [X] Company
+- [X] Eldoc
+- [ ] Yasnippets
+- [ ] Fix Comment syntax?
+- [ ] Fix Identation
+- [ ] Go to definition?
+- [ ] Company with doc-buffer
+- [ ] Better Script Integration
