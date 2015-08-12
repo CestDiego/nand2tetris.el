@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : Mux
+# key : Mux
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: Multiplexors
+# --
+Mux(a=${1:a}, b=${2:b}, sel=${3:sel}, out=${4:out});
+$0

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : ALU
+# key : ALU
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: Multiplexors
+# --
+ALU(x=${1:x}, y=${2:y}, zx=${3:zx}, nx=${4:nx}, zy={$5:zy}, ny=${6:ny}, f=${7:f}, no=${8:no}, out=${9:out}, zr=${10:zr}, ng=${11:ng});
+$0

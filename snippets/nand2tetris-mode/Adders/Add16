@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : Add16
+# key : Add16
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: Adders
+# --
+Add16(a=${1:a}, b=${2:b}, out=${3:out});
+$0

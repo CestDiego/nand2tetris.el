@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : DMux4Way
+# key : DMux4Way
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: Demultiplexors
+# --
+DMux4Way(in=${1:in}, sel=${2:sel}, a=${3:a}, b=${4:b}, c=${5:c}, d=${6:d});
+$0

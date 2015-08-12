@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : PC
+# key : PC
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: Logical Gates
+# --
+PC(in=${1:in}, load=${2:load}, inc=${3:inc}, reset=${4:reset}, out=${5:out});
+$0

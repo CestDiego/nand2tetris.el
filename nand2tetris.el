@@ -193,6 +193,21 @@ Interactively, prompt for symbol."
   (message (cdr (assoc "spec" (assoc symbol nand2tetris-builtin-chips))))))
 
 
+;;; Yasnippet
+
+(defconst nand2tetris::dir (file-name-directory (or load-file-name
+                                                buffer-file-name)))
+;;;###autoload
+(defun nand2tetris//snippets-initialize ()
+  (let ((snip-dir (expand-file-name "snippets" nand2tetris::dir)))
+    (add-to-list 'yas-snippet-dirs snip-dir t)
+    (yas-load-directory snip-dir)))
+
+;;;###autoload
+(eval-after-load 'yasnippet
+  '(nand2tetris//snippets-initialize))
+
+
 ;;; Font-lock and syntax
 (defvar nand2tetris-font-lock-keywords
   ;;Keywords

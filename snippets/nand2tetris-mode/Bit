@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : Bit
+# key : Bit
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: Logical Gates
+# --
+Bit(in=${1:in}, load=${2:load}, out=${3:out});
+$0

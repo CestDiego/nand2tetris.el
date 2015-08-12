@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : FullAdder
+# key : FullAdder
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: Adders
+# --
+FullAdder(a=${1:a}, b=${2:b}, c=${3:c}, sum=${4:sum}, carry=${5:carry});
+$0

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : And16
+# key : And16
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: Logical Gates
+# --
+And16(a=${1:a}, b=${2:b}, out=${3:out});
+$0

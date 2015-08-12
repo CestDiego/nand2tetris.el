@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : Not
+# key : Not
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: Logical Gates
+# --
+Not(in=${1:in}, out=${2:out});
+$0

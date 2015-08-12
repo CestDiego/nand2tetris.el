@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : RAM512
+# key : RAM512
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: RAM
+# --
+RAM512(in=${1:in}, load=${2:load}, address=${3:address}, out=${4:out});
+$0

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : Register
+# key : Register
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: Logical Gates
+# --
+Register(in=${1:in}, load=${2:load}, out=${3:out});
+$0

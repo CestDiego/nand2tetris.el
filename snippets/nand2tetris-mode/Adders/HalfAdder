@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : HalfAdder
+# key : HalfAdder
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: Adders
+# --
+HalfAdder(a=${1:a}, b=${2:b}, sum=${3:sum}, carry=${4:carry});
+$0

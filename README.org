@@ -26,7 +26,7 @@ And printing the result in the modeline, it looks like this:
 ** Todo
 - [X] Company
 - [X] Eldoc
-- [ ] Yasnippets
+- [X] Yasnippets
 - [ ] Fix Comment syntax?
 - [ ] Fix Identation
 - [ ] Go to definition?

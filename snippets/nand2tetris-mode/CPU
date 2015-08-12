@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : CPU
+# key : CPU
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: Logical Gates
+# --
+CPU(inM=${1:inM}, instruction=${2:instruction}, reset=${3:reset}, outM=${4:outM}, writeM=${5:writeM}, addressM=${6:addressM}, pc=${7:pc});
+$0

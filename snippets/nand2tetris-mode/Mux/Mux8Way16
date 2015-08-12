@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : Mux8Way16
+# key : Mux8Way16
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: Multiplexors
+# --
+Mux8Way16(a=${1:a}, b=${2:b}, c=${3:c}, d=${4:d}, e={$5:e}, f=${6:f}, g=${7:g}, h=${8:h}, sel=${9:sel}, out=${10:out});
+$0

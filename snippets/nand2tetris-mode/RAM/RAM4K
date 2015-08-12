@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: Diego Berrocal <cestdiego@gmail.com>
+# name : RAM4k
+# key : RAM4k
+# expand-env: expand-env: ((yas-indent-line 'fixed))
+# group: RAM
+# --
+RAM4k(in=${1:in}, load=${2:load}, address=${3:address}, out=${4:out});
+$0
