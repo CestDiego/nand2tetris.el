@@ -66,7 +66,7 @@
   (interactive)
   (shell-command nand2tetris-vm-emulator))
 
-(defun nand2tetris/get-current-tst-file ()
+(defun nand2tetris//get-current-tst-file ()
   (concat
    (file-name-sans-extension
     (buffer-file-name)) ".tst"))
@@ -76,7 +76,7 @@
   (save-buffer)
   (shell-command (concat
                   nand2tetris-hardware-simulator " "
-                  (nand2tetris/get-current-tst-file))))
+                  (nand2tetris//get-current-tst-file))))
 
 
 ;;; Bindings
