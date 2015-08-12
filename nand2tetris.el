@@ -76,7 +76,6 @@
    (file-name-sans-extension
     (buffer-file-name)) ".cmp"))
 
-
 (defun nand2tetris/tests-current-hdl ()
   (interactive)
   (save-buffer)
@@ -84,12 +83,26 @@
                   nand2tetris-hardware-simulator " "
                   (nand2tetris//get-current-tst-file))))
 
+(defun nand2tetris/tests-current-hdl-elsewhere ()
+  (interactive)
+  (let ((filename (file-name-base (buffer-file-name)))
+        (hdl-buffer (current-buffer))
+        (tst-file (nand2tetris//get-current-tst-file))
+        (cmp-file (nand2tetris//get-current-cmp-file)))
+
+    (copy-file tst-file (concat "/tmp/" filename ".tst") t)
+    (copy-file cmp-file (concat "/tmp/" filename ".cmp") t)
+    (with-temp-file (concat "/tmp/" filename ".hdl")
+      (insert-buffer-substring hdl-buffer))
+    (shell-command (concat nand2tetris-hardware-simulator " "
+                           (concat "/tmp/" filename ".tst")))))
 
 ;;; Bindings
 (defvar nand2tetris-mode-map
   (let ((map (make-sparse-keymap)))
     ;;Compile
-    (define-key map "\C-c\C-c" 'nand2tetris/tests-current-hdl)
+    (define-key map "\C-c\C-c" 'nand2tetris/tests-current-hdl-elsewhere)
+    (define-key map "\C-c\C-k" 'nand2tetris/tests-current-hdl)
     map)
   "Keymap for `nand2tetris-mode'.")
 
