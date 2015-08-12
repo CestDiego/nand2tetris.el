@@ -182,6 +182,16 @@
     (annotation (company-nand2tetris--annotation arg))))
 
 
+;;; ElDoc
+(require 'eldoc)
+(defun nand2tetris-eldoc-function ()
+  "Get help on SYMBOL using `help'.
+Interactively, prompt for symbol."
+  (let ((symbol (company-nand2tetris--grab-symbol))
+        (enable-recursive-minibuffers t))
+  (message (cdr (assoc "spec" (assoc symbol nand2tetris-builtin-chips))))))
+
+
 ;;; Font-lock and syntax
 (defvar nand2tetris-font-lock-keywords
   ;;Keywords
@@ -203,6 +213,9 @@
   "Major mode for editing HDL files for the course Nand2Tetris.
 
 \\{nand2tetris-mode-map}"
+
+  (set (make-local-variable 'eldoc-documentation-function)
+       #'nand2tetris-eldoc-function)
 
   (set (make-local-variable 'font-lock-defaults)
        '(nand2tetris-font-lock-keywords nil nil nil nil)))
