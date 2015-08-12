@@ -4,7 +4,7 @@
 The aim of this package is to be best emacs tool to accompany you on your
 nand2tetris journey [[https://www.coursera.org/course/nand2tetris1][in Coursera]], or the [[http://www.nand2tetris.org][Official Website for it]].
 
-
+ ~Only works on Linux/OSX...for now~ 
 
 ** Goodies
 
