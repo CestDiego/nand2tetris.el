@@ -173,6 +173,7 @@
   (or (company-nand2tetris--grab-symbol)
       'stop))
 
+;;;###autoload
 (defun company-nand2tetris (command &optional arg &rest ignored)
   (interactive (list 'interactive))
   (cl-case command
