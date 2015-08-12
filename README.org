@@ -27,7 +27,7 @@ And printing the result in the modeline, it looks like this:
 - [X] Company
 - [X] Eldoc
 - [X] Yasnippets
-- [ ] Fix Comment syntax?
+- [X] Fix Comment syntax?
 - [ ] Fix Identation
 - [ ] Go to definition?
 - [ ] Company with doc-buffer

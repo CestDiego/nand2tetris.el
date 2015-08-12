@@ -233,6 +233,9 @@ Interactively, prompt for symbol."
   (set (make-local-variable 'eldoc-documentation-function)
        #'nand2tetris-eldoc-function)
 
+  (set (make-local-variable 'comment-start) "// ")
+  (set (make-local-variable 'comment-start-skip) "//+\\s-*")
+
   (set (make-local-variable 'font-lock-defaults)
        '(nand2tetris-font-lock-keywords nil nil nil nil)))
 
