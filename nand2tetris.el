@@ -107,7 +107,7 @@
   "Keymap for `nand2tetris-mode'.")
 
 
- ;; Company
+;;; Company
 (require 'company)
 (require 'cl-lib)
 
@@ -182,7 +182,7 @@
     (annotation (company-nand2tetris--annotation arg))))
 
 
- ;; Font-lock and syntax
+;;; Font-lock and syntax
 (defvar nand2tetris-font-lock-keywords
   ;;Keywords
   `(,(rx symbol-start
