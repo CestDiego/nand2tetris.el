@@ -107,7 +107,82 @@
   "Keymap for `nand2tetris-mode'.")
 
 
-;;; Font-lock and syntax
+ ;; Company
+(require 'company)
+(require 'cl-lib)
+
+(defvar nand2tetris-builtin-chips
+  '(("Add16" . (("spec" . "Add16(a= ,b= ,out= )")))
+    ("ALU" . (("spec" . "ALU(x= ,y= ,zx= ,nx= ,zy= ,ny= ,f= ,no= ,out= ,zr= ,ng= )")))
+    ("And16" .  (("spec" . "And16(a= ,b= ,out= )")))
+    ("And" . (("spec" . "And(a= ,b= ,out= )")))
+    ("ARegister" . (("spec" . "ARegister(in= ,load= ,out= )")))
+    ("Bit" . (("spec" . "Bit(in= ,load= ,out= )")))
+    ("CPU" . (("spec" . "CPU(inM= ,instruction= ,reset= ,outM= ,writeM= ,addressM= ,pc= )")))
+    ("DFF" . (("spec" . "DFF(in= ,out= )")))
+    ("DMux4Way" . (("spec" . "DMux4Way(in= ,sel= ,a= ,b= ,c= ,d= )")))
+    ("DMux8Way" . (("spec" . "DMux8Way(in= ,sel= ,a= ,b= ,c= ,d= ,e= ,f= ,g= ,h= )")))
+    ("DMux" . (("spec" . "DMux(in= ,sel= ,a= ,b= )")))
+    ("DRegister" . (("spec" . "DRegister(in= ,load= ,out= )")))
+    ("FullAdder" . (("spec" . "FullAdder(a= ,b= ,c= ,sum= ,carry= )")))
+    ("HalfAdder" . (("spec" . "HalfAdder(a= ,b= ,sum= , carry= )")))
+    ("Inc16" . (("spec" . "Inc16(in= ,out= )")))
+    ("Keyboard" . (("spec" . "Keyboard(out= )")))
+    ("Memory" . (("spec" . "Memory(in= ,load= ,address= ,out= )")))
+    ("Mux16" . (("spec" . "Mux16(a= ,b= ,sel= ,out= )")))
+    ("Mux4Way16" . (("spec" . "Mux4Way16(a= ,b= ,c= ,d= ,sel= ,out= )")))
+    ("Mux8Way16" . (("spec" . "Mux8Way16(a= ,b= ,c= ,d= ,e= ,f= ,g= ,h= ,sel= ,out= )")))
+    ("Mux" . (("spec" . "Mux(a= ,b= ,sel= ,out= )")))
+    ("Nand" . (("spec" . "Nand(a= ,b= ,out= )")))
+    ("Not16" . (("spec" . "Not16(in= ,out= )")))
+    ("Not" . (("spec" . "Not(in= ,out= )")))
+    ("Or16" . (("spec" . "Or16(a= ,b= ,out= )")))
+    ("Or8Way" . (("spec" . "Or8Way(in= ,out= )")))
+    ("Or" . (("spec" . "Or(a= ,b= ,out= )")))
+    ("PC" . (("spec" . "PC(in= ,load= ,inc= ,reset= ,out= )")))
+    ("RAM16K" . (("spec" . "RAM16K(in= ,load= ,address= ,out= )")))
+    ("RAM4K" . (("spec" . "RAM4K(in= ,load= ,address= ,out= )")))
+    ("RAM512" . (("spec" . "RAM512(in= ,load= ,address= ,out= )")))
+    ("RAM64" . (("spec" . "RAM64(in= ,load= ,address= ,out= )")))
+    ("RAM8" . (("spec" . "RAM8(in= ,load= ,address= ,out= )")))
+    ("Register" . (("spec" . "Register(in= ,load= ,out= )")))
+    ("ROM32K" . (("spec" . "ROM32K(address= ,out= )")))
+    ("Screen" . (("spec" . "Screen(in= ,load= ,address= ,out= )")))
+    ("Xor" . (("spec" . "Xor(a= ,b= ,out= )"))))
+  "Built In Chips Alist")
+
+(defun company-nand2tetris--candidates (prefix)
+  (let ((res))
+    (dolist (option nand2tetris-builtin-chips)
+      (let ((name (car option)))
+        (when (string-prefix-p prefix name)
+          (push name res))))
+    res))
+
+(defun company-nand2tetris--annotation (candidate)
+  (message candidate)
+  (let ((spec (cdr (assoc "spec" (assoc candidate nand2tetris-builtin-chips)))))
+    (format "\t%s" spec)))
+
+(defun company-nand2tetris--grab-symbol ()
+      (buffer-substring (point) (save-excursion (skip-syntax-backward "w_.")
+                                                (point))))
+
+(defun company-nand2tetris--prefix ()
+  "Grab prefix at point."
+  (or (company-nand2tetris--grab-symbol)
+      'stop))
+
+(defun company-nand2tetris (command &optional arg &rest ignored)
+  (interactive (list 'interactive))
+  (cl-case command
+    (interactive (company-begin-backend 'company-nand2tetris))
+    (prefix (company-nand2tetris--prefix))
+    (candidates (company-nand2tetris--candidates arg))
+    (annotation (company-nand2tetris--annotation arg))))
+
+
+ ;; Font-lock and syntax
 (defvar nand2tetris-font-lock-keywords
   ;;Keywords
   `(,(rx symbol-start
