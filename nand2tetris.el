@@ -71,6 +71,12 @@
    (file-name-sans-extension
     (buffer-file-name)) ".tst"))
 
+(defun nand2tetris//get-current-cmp-file ()
+  (concat
+   (file-name-sans-extension
+    (buffer-file-name)) ".cmp"))
+
+
 (defun nand2tetris/tests-current-hdl ()
   (interactive)
   (save-buffer)
