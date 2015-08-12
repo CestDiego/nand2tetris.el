@@ -43,21 +43,27 @@
  nand2tetris-vm-emulator (expand-file-name "VMEmulator.sh" nand2tetris-tools-dir))
 
 (defun nand2tetris/hardware-simulator ()
+  (interactive)
   (shell-command nand2tetris-hardware-simulator))
 
 (defun nand2tetris/assembler ()
+  (interactive)
   (shell-command nand2tetris-assembler))
 
 (defun nand2tetris/cpu-emulator ()
+  (interactive)
   (shell-command nand2tetris-cpu-emulator))
 
 (defun nand2tetris/jack-compiler ()
+  (interactive)
   (shell-command nand2tetris-jack-compiler))
 
 (defun nand2tetris/text-comparer ()
+  (interactive)
   (shell-command nand2tetris-text-comparer))
 
 (defun nand2tetris/vm-emulator ()
+  (interactive)
   (shell-command nand2tetris-vm-emulator))
 
 (defun nand2tetris/get-current-tst-file ()
