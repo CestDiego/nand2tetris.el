@@ -20,14 +20,15 @@
 ;; Useful functions to make following the coursera course easier.
 
 ;;; Code:
-(require 'cc-mode)
 
 (defvar nand2tetris-source-dir nil
   "Source directory where nadn2tetris has been downloaded.")
 
 (defconst nand2tetris-mode-syntax-table
   (let ((table (make-syntax-table)))
-    (c-populate-syntax-table table)
+    (modify-syntax-entry ?/ ". 124b" table)
+    (modify-syntax-entry ?* ". 23" table)
+    (modify-syntax-entry ?\n "> b" table)
     table))
 
 
