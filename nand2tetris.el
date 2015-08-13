@@ -74,17 +74,38 @@
   (interactive)
   (shell-command nand2tetris-vm-emulator))
 
-(defun nand2tetris//get-current-tst-file ()
-  "Get the .tst file in the same dir with same file-extension."
-  (concat
-   (file-name-sans-extension
-    (buffer-file-name)) ".tst"))
+(defun nand2tetris//get-test-file (buffer)
+  "Get the test file for BUFFER."
+  (let ((test-file (concat
+                    (file-name-sans-extension
+                     (with-current-buffer buffer
+                       (buffer-file-name))) ".tst")))
+    (unless (file-exists-p test-file)
+      (error "Could not find the test file for %s" (buffer-name)))
+    test-file))
 
-(defun nand2tetris//get-current-cmp-file ()
-  "Get the .cmp file in the same dir with the same file-name."
-  (concat
-   (file-name-sans-extension
-    (buffer-file-name)) ".cmp"))
+(defun nand2tetris//get-current-test-file ()
+  "Get the test file for the current buffer."
+  (interactive)
+  (message
+  (nand2tetris//get-test-file (current-buffer))))
+
+(defun nand2tetris//get-compare-file (buffer)
+  "Get the compare file for BUFFER."
+  (let ((compare-file (concat
+                    (file-name-sans-extension
+                     (with-current-buffer buffer
+                       (buffer-file-name))) ".cmp")))
+    (unless (file-exists-p compare-file)
+      (error "Could not find the compare file for %s" (buffer-name)))
+    compare-file))
+
+(defun nand2tetris//get-current-compare-file ()
+  "Get the compare file for the current buffer."
+  (interactive)
+  (message
+   (nand2tetris//get-compare-file (current-buffer))))
+
 
 (defun nand2tetris/tests-current-hdl ()
   "Run `HardwareSimulator.sh' on current tst file."
@@ -92,15 +113,15 @@
   (save-buffer)
   (shell-command (concat
                   nand2tetris-hardware-simulator " "
-                  (nand2tetris//get-current-tst-file))))
+                  (nand2tetris//get-current-test-file))))
 
 (defun nand2tetris/tests-current-hdl-elsewhere ()
   "Run `HardwareSimulator.sh' on current tst file, but on another locaion so it can use the builtin chips."
   (interactive)
   (let ((filename (file-name-base (buffer-file-name)))
         (hdl-buffer (current-buffer))
-        (tst-file (nand2tetris//get-current-tst-file))
-        (cmp-file (nand2tetris//get-current-cmp-file)))
+        (tst-file (nand2tetris//get-current-test-file))
+        (cmp-file (nand2tetris//get-current-compare-file)))
 
     (copy-file tst-file (concat "/tmp/" filename ".tst") t)
     (copy-file cmp-file (concat "/tmp/" filename ".cmp") t)
