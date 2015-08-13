@@ -29,7 +29,7 @@ And printing the result in the modeline, it looks like this:
 - [X] Yasnippets
 - [X] Fix Comment syntax?
 - [X] Company with doc-buffer
-- [ ] Fix Identation
+- [X] Fix Identation
 - [ ] Go to definition?
 - [ ] Better Script Integration
 - [ ] Record gif with features
