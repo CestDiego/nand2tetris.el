@@ -38,11 +38,11 @@
 (require 'company-nand2tetris)
 
 (defgroup nand2tetris nil
-  "Major Mode for HDL files in the Nand2Tetris Course"
+  "Major Mode for HDL files in (the) Nand2Tetris Course"
   :group 'nand2tetris)
 
 (defcustom nand2tetris-base-dir nil
-  "Source directory where nadn2tetris has been downloaded"
+  "Source directory where nadn2tetris has been downloaded."
   :group 'nand2tetris)
 
 (defconst nand2tetris-mode-syntax-table
@@ -60,27 +60,27 @@
   :group 'nand2tetris)
 
 (defcustom nand2tetris-hardware-simulator (expand-file-name "HardwareSimulator.sh" nand2tetris-tools-dir)
-  "Hardware Simulator Launcher"
+  "Hardware Simulator Launcher."
   :group 'nand2tetris)
 
 (defcustom nand2tetris-assembler (expand-file-name "Assembler.sh" nand2tetris-tools-dir)
-  "Assembler Launcher"
+  "Assembler Launcher."
   :group 'nand2tetris)
 
 (defcustom nand2tetris-cpu-emulator (expand-file-name "CPUEmulator.sh" nand2tetris-tools-dir)
-  "CPU Emulator Launcher"
+  "CPU Emulator Launcher."
   :group 'nand2tetris)
 
 (defcustom nand2tetris-jack-compiler (expand-file-name "JackCompiler.sh" nand2tetris-tools-dir)
-  "Jack Compiler Launcher"
+  "Jack Compiler Launcher."
   :group 'nand2tetris)
 
 (defcustom nand2tetris-text-comparer (expand-file-name "TextComparer.sh" nand2tetris-tools-dir)
-  "Text Comparer Launcher"
+  "Text Comparer Launcher."
   :group 'nand2tetris)
 
 (defcustom nand2tetris-vm-emulator (expand-file-name "VMEmulator.sh" nand2tetris-tools-dir)
-  "VM Emulator Launcher"
+  "VM Emulator Launcher."
   :group 'nand2tetris)
 
 (defun nand2tetris/hardware-simulator ()
