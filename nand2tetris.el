@@ -9,7 +9,7 @@
 ;; Keywords: nand2tetris, hdl
 ;; Homepage: http://www.github.com/CestDiego/nand2tetris.el/
 ;; Version: 0.0.1
-;; Package-Requires: ((company "0.5") (cl-lib "0.5.0"))
+;; Package-Requires: ((company "0.5") (cl-lib "0.5.0") (yasnippet "0.8.0"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -177,6 +177,7 @@ Interactively, prompt for symbol."
 
 
 ;;; Yasnippet
+(require 'yasnippet)
 
 (defconst nand2tetris::dir (file-name-directory (or load-file-name
                                                 buffer-file-name)))
