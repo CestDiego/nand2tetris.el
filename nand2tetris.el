@@ -633,7 +633,7 @@ out = !(a == b).")
 (defun company-nand2tetris--annotation (candidate)
   "Get the specification of the chip defined by CANDIDATE as annotated text."
   (let ((spec (cdr (assoc "spec" (assoc candidate nand2tetris-builtin-chips)))))
-    (format "\t%s" spec)))
+    (format "    %s" spec)))
 
 (defun company-nand2tetris--grab-symbol ()
   "Grab last symbol with a dotty syntax."
