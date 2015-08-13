@@ -243,6 +243,7 @@ Interactively, prompt for symbol."
           (? space) (seq "(" (0+ not-newline) ")"))
      (1 font-lock-variable-name-face))))
 
+;;;###autoload
 (define-derived-mode nand2tetris-mode prog-mode
   "nand2tetris"
   "Major mode for editing HDL files for the course Nand2Tetris.
@@ -259,6 +260,7 @@ Interactively, prompt for symbol."
   (set (make-local-variable 'font-lock-defaults)
        '(nand2tetris-font-lock-keywords nil nil nil nil)))
 
+;;;###autoload
 (add-to-list 'auto-mode-alist
              `(,(concat (expand-file-name nand2tetris-base-dir) "\.*\\.hdl")
                . nand2tetris-mode))
