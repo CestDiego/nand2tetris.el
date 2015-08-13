@@ -1,4 +1,4 @@
-;;; nand2tetris.el --- Major Mode for HDL files in the Nand2Tetris Course
+;;; nand2tetris.el --- Major mode for HDL files in the nand2tetris course
 ;;; https://www.coursera.org/course/nand2tetris1
 
 ;; Copyright (C) 2015 Diego Berrocal
@@ -9,6 +9,7 @@
 ;; Keywords: nand2tetris, hdl
 ;; Homepage: http://www.github.com/CestDiego/nand2tetris.el/
 ;; Version: 0.0.1
+;; Package-Requires: ((company "0.5") (cl-lib "0.5.0"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -22,7 +23,7 @@
 (require 'cc-mode)
 
 (defvar nand2tetris-source-dir nil
-  "Source directory where nadn2tetris has been downloaded")
+  "Source directory where nadn2tetris has been downloaded.")
 
 (defconst nand2tetris-mode-syntax-table
   (let ((table (make-syntax-table)))
@@ -43,40 +44,49 @@
  nand2tetris-vm-emulator (expand-file-name "VMEmulator.sh" nand2tetris-tools-dir))
 
 (defun nand2tetris/hardware-simulator ()
+  "Summmon Hardware Simulator."
   (interactive)
   (shell-command nand2tetris-hardware-simulator))
 
 (defun nand2tetris/assembler ()
+  "Summon Assembler GUI."
   (interactive)
   (shell-command nand2tetris-assembler))
 
 (defun nand2tetris/cpu-emulator ()
+  "Summon CPU Emulator GUI."
   (interactive)
   (shell-command nand2tetris-cpu-emulator))
 
 (defun nand2tetris/jack-compiler ()
+  "Summon Jack Compiler GUI."
   (interactive)
   (shell-command nand2tetris-jack-compiler))
 
 (defun nand2tetris/text-comparer ()
+  "Summom the Text Comparer."
   (interactive)
   (shell-command nand2tetris-text-comparer))
 
 (defun nand2tetris/vm-emulator ()
+  "Summon the VM Emulator."
   (interactive)
   (shell-command nand2tetris-vm-emulator))
 
 (defun nand2tetris//get-current-tst-file ()
+  "Get the .tst file in the same dir with same file-extension."
   (concat
    (file-name-sans-extension
     (buffer-file-name)) ".tst"))
 
 (defun nand2tetris//get-current-cmp-file ()
+  "Get the .cmp file in the same dir with the same file-name."
   (concat
    (file-name-sans-extension
     (buffer-file-name)) ".cmp"))
 
 (defun nand2tetris/tests-current-hdl ()
+  "Run `HardwareSimulator.sh' on current tst file."
   (interactive)
   (save-buffer)
   (shell-command (concat
@@ -84,6 +94,7 @@
                   (nand2tetris//get-current-tst-file))))
 
 (defun nand2tetris/tests-current-hdl-elsewhere ()
+  "Run `HardwareSimulator.sh' on current tst file, but on another locaion so it can use the builtin chips."
   (interactive)
   (let ((filename (file-name-base (buffer-file-name)))
         (hdl-buffer (current-buffer))
@@ -149,9 +160,10 @@
     ("ROM32K" . (("spec" . "ROM32K(address= ,out= )")))
     ("Screen" . (("spec" . "Screen(in= ,load= ,address= ,out= )")))
     ("Xor" . (("spec" . "Xor(a= ,b= ,out= )"))))
-  "Built In Chips Alist")
+  "Built In Chips Alist.")
 
 (defun company-nand2tetris--candidates (prefix)
+  "Gather Candidates from `nand2tetris-builtin-chips' that match PREFIX."
   (let ((res))
     (dolist (option nand2tetris-builtin-chips)
       (let ((name (car option)))
@@ -160,12 +172,14 @@
     res))
 
 (defun company-nand2tetris--annotation (candidate)
+  "Get the specification of the chip defined by CANDIDATE as annotated text."
   (message candidate)
   (let ((spec (cdr (assoc "spec" (assoc candidate nand2tetris-builtin-chips)))))
     (format "\t%s" spec)))
 
 (defun company-nand2tetris--grab-symbol ()
-      (buffer-substring (point) (save-excursion (skip-syntax-backward "w_.")
+  "Grab last symbol with a dotty syntax."
+  (buffer-substring (point) (save-excursion (skip-syntax-backward "w_.")
                                                 (point))))
 
 (defun company-nand2tetris--prefix ()
@@ -175,6 +189,7 @@
 
 ;;;###autoload
 (defun company-nand2tetris (command &optional arg &rest ignored)
+  "Company backend for `nand2tetris-mode'."
   (interactive (list 'interactive))
   (cl-case command
     (interactive (company-begin-backend 'company-nand2tetris))
@@ -199,6 +214,7 @@ Interactively, prompt for symbol."
                                                 buffer-file-name)))
 ;;;###autoload
 (defun nand2tetris//snippets-initialize ()
+  "Initialize snippets directory."
   (let ((snip-dir (expand-file-name "snippets" nand2tetris::dir)))
     (add-to-list 'yas-snippet-dirs snip-dir t)
     (yas-load-directory snip-dir)))
