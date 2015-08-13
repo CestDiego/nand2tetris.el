@@ -17,12 +17,18 @@
 
 ;;; Commentary:
 
-;; Useful functions to make following the coursera course easier.
+;; Useful functions to make following the Nand2Tetris course easier.
+;; See: https://www.coursera.org/course/nand2tetris1
 
 ;;; Code:
 
-(defvar nand2tetris-source-dir nil
-  "Source directory where nadn2tetris has been downloaded.")
+(defgroup nand2tetris nil
+  "Major Mode for HDL files in the Nand2Tetris Course"
+  :group 'nand2tetris)
+
+(defcustom nand2tetris-base-dir nil
+  "Source directory where nadn2tetris has been downloaded"
+  :group 'nand2tetris)
 
 (defconst nand2tetris-mode-syntax-table
   (let ((table (make-syntax-table)))
@@ -33,16 +39,34 @@
 
 
 ;;; Scripts Integration
-(defvar nand2tetris-tools-dir
-  (expand-file-name "tools" nand2tetris-source-dir))
+(defcustom nand2tetris-tools-dir
+  (expand-file-name "tools" nand2tetris-base-dir)
+  "The directory where the 'tools' (simulator, assembler, etc) are located."
+  :group 'nand2tetris)
 
-(setq
- nand2tetris-hardware-simulator (expand-file-name "HardwareSimulator.sh" nand2tetris-tools-dir)
- nand2tetris-assembler (expand-file-name "Assembler.sh" nand2tetris-tools-dir)
- nand2tetris-cpu-emulator (expand-file-name "CPUEmulator.sh" nand2tetris-tools-dir)
- nand2tetris-jack-compiler (expand-file-name "JackCompiler.sh" nand2tetris-tools-dir)
- nand2tetris-text-comparer (expand-file-name "TextComparer.sh" nand2tetris-tools-dir)
- nand2tetris-vm-emulator (expand-file-name "VMEmulator.sh" nand2tetris-tools-dir))
+(defcustom nand2tetris-hardware-simulator (expand-file-name "HardwareSimulator.sh" nand2tetris-tools-dir)
+  "Hardware Simulator Launcher"
+  :group 'nand2tetris)
+
+(defcustom nand2tetris-assembler (expand-file-name "Assembler.sh" nand2tetris-tools-dir)
+  "Assembler Launcher"
+  :group 'nand2tetris)
+
+(defcustom nand2tetris-cpu-emulator (expand-file-name "CPUEmulator.sh" nand2tetris-tools-dir)
+  "CPU Emulator Launcher"
+  :group 'nand2tetris)
+
+(defcustom nand2tetris-jack-compiler (expand-file-name "JackCompiler.sh" nand2tetris-tools-dir)
+  "Jack Compiler Launcher"
+  :group 'nand2tetris)
+
+(defcustom nand2tetris-text-comparer (expand-file-name "TextComparer.sh" nand2tetris-tools-dir)
+  "Text Comparer Launcher"
+  :group 'nand2tetris)
+
+(defcustom nand2tetris-vm-emulator (expand-file-name "VMEmulator.sh" nand2tetris-tools-dir)
+  "VM Emulator Launcher"
+  :group 'nand2tetris)
 
 (defun nand2tetris/hardware-simulator ()
   "Summmon Hardware Simulator."
@@ -751,7 +775,7 @@ Interactively, prompt for symbol."
        '(nand2tetris-font-lock-keywords nil nil nil nil)))
 
 (add-to-list 'auto-mode-alist
-             `(,(concat (expand-file-name nand2tetris-source-dir) "\.*\\.hdl")
+             `(,(concat (expand-file-name nand2tetris-base-dir) "\.*\\.hdl")
                . nand2tetris-mode))
 
 (provide 'nand2tetris)
