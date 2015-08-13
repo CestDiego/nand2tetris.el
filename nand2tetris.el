@@ -219,7 +219,7 @@ Interactively, prompt for symbol."
           (progn
             (save-excursion
               (forward-line -1)
-              (setq cur-indent (- (current-indentation) default-tab-width)))
+              (setq cur-indent (- (current-indentation) tab-width)))
             (if (< cur-indent 0) ; We can't indent past the left margin
                 (setq cur-indent 0)))
         (save-excursion
@@ -231,7 +231,7 @@ Interactively, prompt for symbol."
                   (setq not-indented nil))
               (if (looking-at "^[ \t]*\\(CHIP\\)") ; This hint indicates that we need to indent an extra level
                   (progn
-                    (setq cur-indent (+ (current-indentation) default-tab-width)) ; Do the actual indenting
+                    (setq cur-indent (+ (current-indentation) tab-width)) ; Do the actual indenting
                     (setq not-indented nil))
                 (if (bobp)
                     (setq not-indented nil)))))))
