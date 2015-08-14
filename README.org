@@ -30,6 +30,7 @@ And printing the result in the modeline, it looks like this:
 - [X] Fix Comment syntax?
 - [X] Company with doc-buffer
 - [X] Fix Identation
+- [ ] Define a grab-symbol function that works in the middle of a symbol
+- [ ] Record gif with features
 - [ ] Go to definition?
 - [ ] Better Script Integration
-- [ ] Record gif with features
