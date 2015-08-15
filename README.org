@@ -34,3 +34,8 @@ And printing the result in the modeline, it looks like this:
 - [ ] Record gif with features
 - [ ] Go to definition?
 - [ ] Better Script Integration
+- [ ] Flycheck
+- [ ] HackSembly Mode for .asm files (one that doesn't suck...that much)
+- [ ] Color highlighting for .hack files? (cute experiment)
+- [ ] Test Mode?
+- [ ] Also Open a diff between .cmp and .out when error is given.
