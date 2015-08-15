@@ -36,6 +36,7 @@
 ;;; Code:
 
 (require 'company-nand2tetris)
+(require 'rx)
 
 (defgroup nand2tetris nil
   "Major Mode for HDL files in (the) Nand2Tetris Course"
@@ -182,7 +183,7 @@
 ;;; ElDoc
 (require 'eldoc)
 
-(defun get-chip-at-line ()
+(defun nand2tetris//get-chip-at-line ()
   "Gets the chip currently used, so that placing the cursor at
 any point in the line:
    Not16 (in=a, out=out)
@@ -197,7 +198,7 @@ Will return Not16"
 (defun nand2tetris-eldoc-function ()
   "Get help on SYMBOL using `help'.
 Interactively, prompt for symbol."
-  (let ((symbol (get-chip-at-line))
+  (let ((symbol (nand2tetris//get-chip-at-line))
         (enable-recursive-minibuffers t))
     (message (cdr (assoc "spec" (assoc symbol nand2tetris-builtin-chips))))))
 
