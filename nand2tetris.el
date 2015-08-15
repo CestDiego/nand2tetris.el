@@ -181,12 +181,25 @@
 
 ;;; ElDoc
 (require 'eldoc)
+
+(defun get-chip-at-line ()
+  "Gets the chip currently used, so that placing the cursor at
+any point in the line:
+   Not16 (in=a, out=out)
+Will return Not16"
+  (save-excursion
+    (beginning-of-line)
+    (search-forward-regexp
+     (rx (group (* word))
+         (? space ) "("))
+    (match-string 1)))
+
 (defun nand2tetris-eldoc-function ()
   "Get help on SYMBOL using `help'.
 Interactively, prompt for symbol."
-  (let ((symbol (company-nand2tetris--grab-symbol))
+  (let ((symbol (get-chip-at-line))
         (enable-recursive-minibuffers t))
-  (message (cdr (assoc "spec" (assoc symbol nand2tetris-builtin-chips))))))
+    (message (cdr (assoc "spec" (assoc symbol nand2tetris-builtin-chips))))))
 
 
 ;;; Yasnippet
