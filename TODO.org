@@ -1,0 +1,22 @@
+* DONE Company
+CLOSED: [2015-08-15 Sat 13:10]
+* DONE Eldoc
+CLOSED: [2015-08-15 Sat 13:10]
+* DONE Yasnippets
+CLOSED: [2015-08-15 Sat 13:10]
+* DONE Fix Comment syntax?
+CLOSED: [2015-08-15 Sat 13:10]
+* DONE Company with doc-buffer
+CLOSED: [2015-08-15 Sat 13:10]
+* DONE Fix Identation
+CLOSED: [2015-08-15 Sat 13:10]
+* DONE Define a grab-symbol function that works in the middle of a symbol
+CLOSED: [2015-08-15 Sat 13:10]
+* TODO Record gif with features
+* TODO Go to definition?
+* TODO Better Script Integration
+* TODO Flycheck
+* TODO HackSembly Mode for .asm files (one that doesn't suck...that much)
+* TODO Color highlighting for .hack files? (cute experiment)
+* TODO Test Mode?
+* TODO Also Open a diff between .cmp and .out when error is given.

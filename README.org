@@ -1,10 +1,13 @@
 #+TITLE: nand2tetris.el
 
+[[http://melpa.org/#/nand2tetris][file:http://melpa.org/packages/nand2tetris-badge.svg]]
 
 The aim of this package is to be best emacs tool to accompany you on your
 nand2tetris journey [[https://www.coursera.org/course/nand2tetris1][in Coursera]], or the [[http://www.nand2tetris.org][Official Website for it]].
 
  ~Only works on Linux/OSX...for now~ 
+
+
 
 ** Goodies
 
@@ -20,29 +23,3 @@ running:
 And printing the result in the modeline, it looks like this:
 
 [[file:img/test-current-hdl.png]]
-
- 
-
-** Todo
-*** DONE Company
-CLOSED: [2015-08-15 Sat 13:10]
-*** DONE Eldoc
-CLOSED: [2015-08-15 Sat 13:10]
-*** DONE Yasnippets
-CLOSED: [2015-08-15 Sat 13:10]
-*** DONE Fix Comment syntax?
-CLOSED: [2015-08-15 Sat 13:10]
-*** DONE Company with doc-buffer
-CLOSED: [2015-08-15 Sat 13:10]
-*** DONE Fix Identation
-CLOSED: [2015-08-15 Sat 13:10]
-*** DONE Define a grab-symbol function that works in the middle of a symbol
-CLOSED: [2015-08-15 Sat 13:10]
-*** TODO Record gif with features
-*** TODO Go to definition?
-*** TODO Better Script Integration
-*** TODO Flycheck
-*** TODO HackSembly Mode for .asm files (one that doesn't suck...that much)
-*** TODO Color highlighting for .hack files? (cute experiment)
-*** TODO Test Mode?
-*** TODO Also Open a diff between .cmp and .out when error is given.
