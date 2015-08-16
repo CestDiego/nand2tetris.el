@@ -264,7 +264,7 @@ Interactively, prompt for symbol."
     (,(rx symbol-start (group (or "IN" "OUT" "PARTS" "BUILTIN" "CLOCKED")))
      (1 font-lock-variable-name-face))
     ;; attribute names!
-    (,(rx (or "(" ?,) (? space) (group (* word)) (? (seq "[" (* (or digit ?.)) "]")) ?= (* (or word digit ?- ?_)))
+    (,(rx (or "(" ?,) (? space) (group (* word)) (? (seq "[" (* (or digit ?.)) "]")) ?= (* (or word digit ?-)))
      (1 font-lock-constant-face))
     ;; CHIP <ChipName>
     (,(rx symbol-start (or "CHIP" "BUILTIN") (1+ space) (group (1+ (or word ?_))))
