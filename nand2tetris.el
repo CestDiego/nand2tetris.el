@@ -264,14 +264,14 @@ Interactively, prompt for symbol."
     (,(rx symbol-start (group (or "IN" "OUT" "PARTS" "BUILTIN" "CLOCKED")))
      (1 font-lock-variable-name-face))
     ;; attribute names!
-    (,(rx (or "(" ?,) (? space) (group (* word)) (? (seq "[" (* (or digit ?.)) "]")) ?= (* (or word digit ?-)))
+    (,(rx (group (* word)) (? (seq "[" (* (or digit ?.)) "]")) (* space) ?= (* (or word digit ?-)))
      (1 font-lock-constant-face))
     ;; CHIP <ChipName>
     (,(rx symbol-start (or "CHIP" "BUILTIN") (1+ space) (group (1+ (or word ?_))))
      (1 font-lock-type-face))
     ;; <ChipName> (in=in, out=out);
     (,(rx symbol-start (group (1+ (or word ?_)))
-          (? space) (seq "(" (0+ not-newline) ")"))
+          (? space) "(")
      (1 font-lock-variable-name-face))))
 
 ;;;###autoload
