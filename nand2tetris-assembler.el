@@ -33,7 +33,6 @@
 ;; See: https://www.coursera.org/course/nand2tetris-assembler1
 
 ;;; Code:
-(require 'nand2tetris)
 
 (defconst nand2tetris-assembler--default-symbols-alist
   '(("SP"     .  #x0)
@@ -108,12 +107,16 @@ According to http://www.nand2tetris.org/chapters/chapter%2006.pdf")
   '((""    .  "000")
     ("JGT" .  "001")
     ("JEQ" .  "010")
-    ("JGE" .  "100")
-    ("JLT" .  "110")
-    ("JNE" .  "011")
-    ("JLE" .  "101")
+    ("JGE" .  "011")
+    ("JLT" .  "100")
+    ("JNE" .  "101")
+    ("JLE" .  "110")
     ("JMP" .  "111"))
   "Jump symbols relation with their binary representation.")
+
+(defvar nand2tetris-assembler--symbols-alist
+  nil
+  "Le symbols.")
 
 (defun nand2tetris-assembler/read-lines (file)
   "Return list of non-double-slash begginging lines in FILE."
@@ -123,24 +126,24 @@ According to http://www.nand2tetris.org/chapters/chapter%2006.pdf")
       (split-string (buffer-string) "\n" t filter-regexp))))
 
 (defvar nand2tetris-assembler--A-instruction-regexp
-  (rx ?@ (group (* digit)))
+  (rx ?@ (group (+ digit)))
   "Regular Expression for an A instruction.")
 
 (defvar nand2tetris-assembler--C-instruction-regexp
   (rx
    ;;Destination regexp
+   (* space)
    (? (seq
-    (group (* (or "M" "D" "A")))
-    ?=))
+       (group (* (or "M" "D" "A")))
+       ?=))
    ;; Computation regexp
-   (group
-    (* (or "M" "A" "D" ?+ ?- ?! ?| ?& "1" "0"))
+   (seq (group
+         (* (or "M" "A" "D" ?+ ?- ?! ?| ?& "1" "0")))
     (? (or line-end space "/")))
    ;; Jump regexp
-   (? (seq
-       ";"
-       (group (* word))
-       (? (or line-end space "/")))))
+   (? (seq ";"
+           (group (* word))
+           (? (or line-end space "/")))))
   "Regular Expression for an A instruction.")
 
 (defun nand2tetris-assembler/parser (instruction)
@@ -181,24 +184,29 @@ Borrowed from http://stackoverflow.com/a/20577329"
 (defun nand2tetris-assembler/format-C-instruction (data-alist)
   "Return a valid C-Instruction from the fields in DATA-ALIST.
 If one field retrieved by DATA-ALIST isn't matched, error is raised."
-  (let* ((prefix-bits "111")
-         (dest-symbol (or (cdr (assoc "dest" data-alist)) ""))
-         (jump-symbol (or (cdr (assoc "jump" data-alist)) ""))
-         (comp-symbol (or (cdr (assoc "comp" data-alist)) ""))
-         (dest-bits (cdr (assoc dest-symbol nand2tetris-assembler--dest-symbols-alist)))
-         (comp-bits (cdr (assoc comp-symbol nand2tetris-assembler--comp-symbols-alist)))
-         (jump-bits (cdr (assoc jump-symbol nand2tetris-assembler--jump-symbols-alist))))
+  (let*
+      ((prefix-bits "111")
+       (dest-symbol (or (cdr (assoc "dest" data-alist)) ""))
+       (jump-symbol (or (cdr (assoc "jump" data-alist)) ""))
+       (comp-symbol (or (cdr (assoc "comp" data-alist)) ""))
+       (dest-bits (cdr (assoc dest-symbol
+                              nand2tetris-assembler--dest-symbols-alist)))
+       (comp-bits (cdr (assoc comp-symbol
+                              nand2tetris-assembler--comp-symbols-alist)))
+       (jump-bits (cdr (assoc jump-symbol
+                              nand2tetris-assembler--jump-symbols-alist))))
     (unless dest-bits
-      (error (concat "The Destination Symbol does not match to the predefined symbols: " dest-symbol)))
+      (error (concat "The Destination Symbol does not"
+                     " match to the predefined symbols: " dest-symbol)))
     (unless comp-bits
-      (error (concat "The Computation Symbol does not match to the predefined symbols: " comp-symbol)))
+      (error (concat "The Computation Symbol does not"
+                     " match to the predefined symbols: " comp-symbol)))
     (unless jump-bits
-      (error (concat "The Jump Symbol does not match to the predefined symbols: " jump-symbol)))
+      (error (concat "The Jump Symbol does not"
+                     " match to the predefined symbols: " jump-symbol)))
+    (concat prefix-bits comp-bits dest-bits jump-bits)))
 
-    (concat prefix-bits comp-bits dest-bits jump-bits)
-    ))
-
-(defun nand2tetris-assembler/process-line (instruction)
+(defun nand2tetris-assembler/process (instruction)
   "Assume INSTRUCTION is valid and output it's binary representation.
 Instruction correctness given by
 http://www.nand2tetris.org/chapters/chapter%2006.pdf Page 106.
@@ -210,20 +218,35 @@ going to be ignored by the regular expressions."
          (parsed-data (cdr parsed-instruction)))
     (cond
      ((equal type "A" )
-      (message
-       (concat "A Instruction: "
-               (nand2tetris-assembler/format-A-instruction parsed-data))))
-     ((equal type "C") (print parsed-data)
-      (message
-       (concat "C Instruction: "
-               (nand2tetris-assembler/format-C-instruction parsed-data)))))))
+      (insert
+       (nand2tetris-assembler/format-A-instruction parsed-data)))
+     ((equal type "C")
+      ;; (print parsed-data)
+      (insert
+       (nand2tetris-assembler/format-C-instruction parsed-data))))
+    (insert "\n")))
+
+(defvar nand2tetris-assembler--label-regexp
+  (rx "(" (group (+ (or word ?- ?_ ?. ?$))) ")" )
+  "Regular Expression that matches the label tags.")
+
+(defvar nand2tetris-assembler--variable-regexp
+  (rx ?@ (group letter (* (or word ?- ?_ ?. ?$))))
+  "Regular Expression that matches the variable tags.")
+
 
 (defun nand2tetris-assembler/init ()
   "Init function for the Hack Assembly mode."
   (interactive)
+  (setq nand2tetris-assembler--symbols-alist
+        nand2tetris-assembler--default-symbols-alist)
   (let* ((current-file (buffer-file-name))
+         (filename (concat (file-name-sans-extension buffer-file-name) ".hack"))
          (read-lines   (nand2tetris-assembler/read-lines current-file)))
-    (mapcar 'nand2tetris-assembler/process-line read-lines)))
+    ;; This only works with valid instructions with no symbols nor labels, but
+    ;; that's about to change very soon ;)
+    (with-temp-file filename
+      (mapcar 'nand2tetris-assembler/process read-lines))))
 
 
 ;;; Bindings

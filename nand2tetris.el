@@ -296,5 +296,7 @@ Interactively, prompt for symbol."
              `(,(concat (expand-file-name nand2tetris-base-dir) "\.*\\.hdl")
                . nand2tetris-mode))
 
+(require 'nand2tetris-assembler)
+
 (provide 'nand2tetris)
 ;;; nand2tetris.el ends here
