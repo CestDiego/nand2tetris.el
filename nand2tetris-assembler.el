@@ -139,7 +139,7 @@ According to http://www.nand2tetris.org/chapters/chapter%2006.pdf")
    ;; Computation regexp
    (seq (group
          (* (or "M" "A" "D" ?+ ?- ?! ?| ?& "1" "0")))
-    (? (or line-end space "/")))
+        (? (or line-end space "/")))
    ;; Jump regexp
    (? (seq ";"
            (group (* word))
@@ -234,19 +234,74 @@ going to be ignored by the regular expressions."
   (rx ?@ (group letter (* (or word ?- ?_ ?. ?$))))
   "Regular Expression that matches the variable tags.")
 
+(defun nand2tetris-assembler/digest-labels (lines)
+  "Read LINES and take away the labels.
+The LABELS  are stored in `nand2tetris-assembler--symbols-alist'"
+  (let ((label-regexp nand2tetris-assembler--label-regexp)
+        (i 0)
+        (digested-lines '()))
+    (dolist (line lines digested-lines)
+      (if (string-match label-regexp line)
+          (let* ((label (match-string 1 line)))
+            ;; Make sure label is not repeated if it is ERROR
+            ;; Make sure this is not final line.
+            (push `(,label . ,i) nand2tetris-assembler--symbols-alist))
+        ;; Line isn't a label so..
+        ;; Augment the counter
+        (setq i (+ 1 i))
+        ;; Let the line pass thru
+        (setq digested-lines (append digested-lines (list line))))))) 
+
+(defun nand2tetris-assembler/replace-variables (lines)
+  "Return a variable/label agnostic INSTRUCTION for each of the LINES.
+Use the tables defined in `nand2tetris-assembler--symbols-alist'.
+Take into consideration that this table stores integer values, so
+that when returning the corresponding instruction we use the
+`format' function with the %d escape."
+  (let ((variable-index 16) ;; Start variables at 16
+        (variable-regexp   nand2tetris-assembler--variable-regexp)
+        (A-regexp          nand2tetris-assembler--A-instruction-regexp)
+        (instructions '()))
+    (dolist (line lines instructions)
+      (if (string-match variable-regexp line)
+          (let* ((variable-name (match-string 1 line))
+                 (value (cdr
+                         (assoc
+                          variable-name
+                          nand2tetris-assembler--symbols-alist))))
+            (when (equal "" variable-name)
+              (error
+               "In Replacing Variables: variable-name checks empty string"))
+            (if value
+                ;; There is a variable or label with that name in the alist
+                (setq instructions (append instructions
+                                           (list (format "@%d" value))))
+              ;; We add the variable to the alist, we use the full name instead
+              ;; of the let local variable because otherwise push isn't global.
+              (push `(,variable-name . ,variable-index)
+                    nand2tetris-assembler--symbols-alist)
+              ;; Let's replace it imnediatly so that we don't make another scan
+              ;; of the lines
+              (setq instructions
+                    (append instructions (list (format "@%d" variable-index))))
+              ;; Increase the counter
+              (setq variable-index (+ 1 variable-index))))
+        (setq instructions (append instructions (list line)))))))
 
 (defun nand2tetris-assembler/init ()
   "Init function for the Hack Assembly mode."
   (interactive)
+  ;; Initialize the symbols alist
   (setq nand2tetris-assembler--symbols-alist
         nand2tetris-assembler--default-symbols-alist)
-  (let* ((current-file (buffer-file-name))
+  (let* ((current-file     (buffer-file-name))
+         (read-lines       (nand2tetris-assembler/read-lines current-file))
+         (digested-lines   (nand2tetris-assembler/digest-labels read-lines))
          (filename (concat (file-name-sans-extension buffer-file-name) ".hack"))
-         (read-lines   (nand2tetris-assembler/read-lines current-file)))
-    ;; This only works with valid instructions with no symbols nor labels, but
-    ;; that's about to change very soon ;)
+         (instructions
+          (nand2tetris-assembler/replace-variables digested-lines)))
     (with-temp-file filename
-      (mapcar 'nand2tetris-assembler/process read-lines))))
+      (mapcar 'nand2tetris-assembler/process instructions))))
 
 
 ;;; Bindings
