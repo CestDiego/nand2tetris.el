@@ -9,6 +9,7 @@
 ;; Keywords: nand2tetris-assembler, hdl
 ;; Homepage: http://www.github.com/CestDiego/nand2tetris-assembler.el/
 ;; Version: 0.0.1
+;; Package-Requires: ((nand2tetris-core "0.0.1"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -34,7 +35,14 @@
 
 ;;; Code:
 
-(defconst nand2tetris-assembler--default-symbols-alist
+(eval-when-compile (require 'names))
+
+(require 'nand2tetris-core)
+
+;;;###autoload
+(define-namespace nand2tetris-assembler
+
+(defconst --default-symbols-alist
   '(("SP"     .  #x0)
     ("LCL"    .  #x1)
     ("ARG"    .  #x2)
@@ -61,7 +69,7 @@
   "Default alist of Predefined Symbols for the Hack Assembly.
 According to http://www.nand2tetris.org/chapters/chapter%2006.pdf")
 
-(defconst nand2tetris-assembler--comp-symbols-alist
+(defconst --comp-symbols-alist
   '(("0"    .  "0101010")
     ("1"    .  "0111111")
     ("-1"   .  "0111010")
@@ -92,7 +100,7 @@ According to http://www.nand2tetris.org/chapters/chapter%2006.pdf")
     ("D|M"  .  "1010101"))
   "Computation symbols relation with their binary representation.")
 
-(defconst nand2tetris-assembler--dest-symbols-alist
+(defconst --dest-symbols-alist
   '((""    .  "000")
     ("M"   .  "001")
     ("D"   .  "010")
@@ -103,7 +111,7 @@ According to http://www.nand2tetris.org/chapters/chapter%2006.pdf")
     ("AMD" .  "111"))
   "Destination symbols relation with their binary representation.")
 
-(defconst nand2tetris-assembler--jump-symbols-alist
+(defconst --jump-symbols-alist
   '((""    .  "000")
     ("JGT" .  "001")
     ("JEQ" .  "010")
@@ -114,22 +122,22 @@ According to http://www.nand2tetris.org/chapters/chapter%2006.pdf")
     ("JMP" .  "111"))
   "Jump symbols relation with their binary representation.")
 
-(defvar nand2tetris-assembler--symbols-alist
-  nil
+(defvar-local --symbols-alist
+  --default-symbols-alist
   "Le symbols.")
 
-(defun nand2tetris-assembler/read-lines (file)
+(defun /read-lines (file)
   "Return list of non-double-slash begginging lines in FILE."
   (let ((filter-regexp "\s*//.*$"))
     (with-temp-buffer
       (insert-file-contents file)
       (split-string (buffer-string) "\n" t filter-regexp))))
 
-(defvar nand2tetris-assembler--A-instruction-regexp
+(defvar --A-instruction-regexp
   (rx ?@ (group (+ digit)))
   "Regular Expression for an A instruction.")
 
-(defvar nand2tetris-assembler--C-instruction-regexp
+(defvar --C-instruction-regexp
   (rx
    ;;Destination regexp
    (* space)
@@ -146,31 +154,29 @@ According to http://www.nand2tetris.org/chapters/chapter%2006.pdf")
            (? (or line-end space "/")))))
   "Regular Expression for an A instruction.")
 
-(defun nand2tetris-assembler/parser (instruction)
+(defun /parser (instruction)
   "Provides convenient access to the command’s components (fields and symbols).
 In addition, removes all white space and comments in INSTRUCTION."
-  (let ((A-regexp nand2tetris-assembler--A-instruction-regexp)
-        (C-regexp nand2tetris-assembler--C-instruction-regexp))
-    (cond ((string-match A-regexp instruction)
-           `("A" . ,(match-string 1 instruction)))
-          ((string-match C-regexp instruction)
-           `("C" . (("dest" . ,(match-string 1 instruction))
-                    ("comp" . ,(match-string 2 instruction))
-                    ("jump" . ,(match-string 3 instruction))))))))
+  (cond ((string-match --A-instruction-regexp instruction)
+         `("A" . ,(match-string 1 instruction)))
+        ((string-match --C-instruction-regexp instruction)
+         `("C" . (("dest" . ,(match-string 1 instruction))
+                  ("comp" . ,(match-string 2 instruction))
+                  ("jump" . ,(match-string 3 instruction)))))))
 
-(defun nand2tetris-assembler/format-A-instruction (decimal-number)
+(defun /format-A-instruction (decimal-number)
   "Convert DECIMAL-NUMBER to a 16-long string binary representation.
 Resulting string has 0-padding if the binary representaton is not
 big enough."
   (let* ((integer (string-to-number decimal-number))
-         (binary-string (nand2tetris-assembler/int-to-binary-string integer)))
+         (binary-string (/int-to-binary-string integer)))
     (if (<= (length binary-string) 16)
         (while (not (equal 16 (length binary-string)))
           (setq binary-string (concat "0" binary-string)))
       (error "The A instruction gave a binary representation bigger than 2e15"))
     binary-string))
 
-(defun nand2tetris-assembler/int-to-binary-string (integer)
+(defun /int-to-binary-string (integer)
   "Convert INTEGER into it's binary representation.
 Borrowed from http://stackoverflow.com/a/20577329"
   (let ((res ""))
@@ -181,7 +187,7 @@ Borrowed from http://stackoverflow.com/a/20577329"
         (setq res "0"))
     res))
 
-(defun nand2tetris-assembler/format-C-instruction (data-alist)
+(defun /format-C-instruction (data-alist)
   "Return a valid C-Instruction from the fields in DATA-ALIST.
 If one field retrieved by DATA-ALIST isn't matched, error is raised."
   (let*
@@ -190,11 +196,11 @@ If one field retrieved by DATA-ALIST isn't matched, error is raised."
        (jump-symbol (or (cdr (assoc "jump" data-alist)) ""))
        (comp-symbol (or (cdr (assoc "comp" data-alist)) ""))
        (dest-bits (cdr (assoc dest-symbol
-                              nand2tetris-assembler--dest-symbols-alist)))
+                              --dest-symbols-alist)))
        (comp-bits (cdr (assoc comp-symbol
-                              nand2tetris-assembler--comp-symbols-alist)))
+                              --comp-symbols-alist)))
        (jump-bits (cdr (assoc jump-symbol
-                              nand2tetris-assembler--jump-symbols-alist))))
+                              --jump-symbols-alist))))
     (unless dest-bits
       (error (concat "The Destination Symbol does not"
                      " match to the predefined symbols: " dest-symbol)))
@@ -206,69 +212,64 @@ If one field retrieved by DATA-ALIST isn't matched, error is raised."
                      " match to the predefined symbols: " jump-symbol)))
     (concat prefix-bits comp-bits dest-bits jump-bits)))
 
-(defun nand2tetris-assembler/process (instruction)
+(defun /process (instruction)
   "Assume INSTRUCTION is valid and output it's binary representation.
 Instruction correctness given by
 http://www.nand2tetris.org/chapters/chapter%2006.pdf Page 106.
 Also the parsed lines do not start with `//' so we can assume it
 will only have a instruction and maybe inline comments that are
 going to be ignored by the regular expressions."
-  (let* ((parsed-instruction (nand2tetris-assembler/parser instruction))
+  (let* ((parsed-instruction (/parser instruction))
          (type (car parsed-instruction))
          (parsed-data (cdr parsed-instruction)))
     (cond
      ((equal type "A" )
       (insert
-       (nand2tetris-assembler/format-A-instruction parsed-data)))
+       (/format-A-instruction parsed-data)))
      ((equal type "C")
       ;; (print parsed-data)
       (insert
-       (nand2tetris-assembler/format-C-instruction parsed-data))))
+       (/format-C-instruction parsed-data))))
     (insert "\n")))
 
-(defvar nand2tetris-assembler--label-regexp
+(defconst --label-regexp
   (rx "(" (group (+ (or word ?- ?_ ?. ?$))) ")" )
   "Regular Expression that matches the label tags.")
 
-(defvar nand2tetris-assembler--variable-regexp
+(defconst --variable-regexp
   (rx ?@ (group letter (* (or word ?- ?_ ?. ?$))))
   "Regular Expression that matches the variable tags.")
 
-(defun nand2tetris-assembler/digest-labels (lines)
+(defun /digest-labels (lines)
   "Read LINES and take away the labels.
 The LABELS  are stored in `nand2tetris-assembler--symbols-alist'"
-  (let ((label-regexp nand2tetris-assembler--label-regexp)
-        (i 0)
+  (let ((i 0)
         (digested-lines '()))
     (dolist (line lines digested-lines)
-      (if (string-match label-regexp line)
+      (if (string-match --label-regexp line)
           (let* ((label (match-string 1 line)))
             ;; Make sure label is not repeated if it is ERROR
             ;; Make sure this is not final line.
-            (push `(,label . ,i) nand2tetris-assembler--symbols-alist))
+            (push `(,label . ,i) --symbols-alist))
         ;; Line isn't a label so..
         ;; Augment the counter
         (setq i (+ 1 i))
         ;; Let the line pass thru
-        (setq digested-lines (append digested-lines (list line))))))) 
+        (setq digested-lines (append digested-lines (list line)))))))
 
-(defun nand2tetris-assembler/replace-variables (lines)
+(defun /replace-variables (lines)
   "Return a variable/label agnostic INSTRUCTION for each of the LINES.
 Use the tables defined in `nand2tetris-assembler--symbols-alist'.
 Take into consideration that this table stores integer values, so
 that when returning the corresponding instruction we use the
 `format' function with the %d escape."
   (let ((variable-index 16) ;; Start variables at 16
-        (variable-regexp   nand2tetris-assembler--variable-regexp)
-        (A-regexp          nand2tetris-assembler--A-instruction-regexp)
         (instructions '()))
     (dolist (line lines instructions)
-      (if (string-match variable-regexp line)
+      (if (string-match --variable-regexp line)
           (let* ((variable-name (match-string 1 line))
                  (value (cdr
-                         (assoc
-                          variable-name
-                          nand2tetris-assembler--symbols-alist))))
+                         (assoc variable-name --symbols-alist))))
             (when (equal "" variable-name)
               (error
                "In Replacing Variables: variable-name checks empty string"))
@@ -278,8 +279,7 @@ that when returning the corresponding instruction we use the
                                            (list (format "@%d" value))))
               ;; We add the variable to the alist, we use the full name instead
               ;; of the let local variable because otherwise push isn't global.
-              (push `(,variable-name . ,variable-index)
-                    nand2tetris-assembler--symbols-alist)
+              (push `(,variable-name . ,variable-index) --symbols-alist)
               ;; Let's replace it imnediatly so that we don't make another scan
               ;; of the lines
               (setq instructions
@@ -288,34 +288,33 @@ that when returning the corresponding instruction we use the
               (setq variable-index (+ 1 variable-index))))
         (setq instructions (append instructions (list line)))))))
 
-(defun nand2tetris-assembler/init ()
+(defun /init ()
   "Init function for the Hack Assembly mode."
   (interactive)
   ;; Initialize the symbols alist
-  (setq nand2tetris-assembler--symbols-alist
-        nand2tetris-assembler--default-symbols-alist)
   (let* ((current-file     (buffer-file-name))
-         (read-lines       (nand2tetris-assembler/read-lines current-file))
-         (digested-lines   (nand2tetris-assembler/digest-labels read-lines))
-         (filename (concat (file-name-sans-extension buffer-file-name) ".hack"))
-         (instructions
-          (nand2tetris-assembler/replace-variables digested-lines)))
+         (read-lines       (/read-lines current-file))
+         (digested-lines   (/digest-labels read-lines))
+         (filename         (concat
+                            (file-name-sans-extension buffer-file-name)
+                            ".hack"))
+         (instructions     (/replace-variables digested-lines)))
     (with-temp-file filename
-      (mapcar 'nand2tetris-assembler/process instructions))))
+      (mapcar #'/process instructions))))
 
 
 ;;; Bindings
-(defvar nand2tetris-assembler-mode-map
+(defvar -mode-map
   (let ((map (make-sparse-keymap)))
     ;;Compile
-    (define-key map "\C-c\C-c" 'nand2tetris-assembler/init)
+    (define-key map "\C-c\C-c" #'/init)
     map)
   "Keymap for `nand2tetris-assembler-mode'.")
 
 
 ;;; Syntax Table
 
-(defconst nand2tetris-assembler-mode-syntax-table
+(defconst -mode-syntax-table
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?/ ". 124b" table)
     (modify-syntax-entry ?* ". 23" table)
@@ -324,7 +323,7 @@ that when returning the corresponding instruction we use the
 
 
 ;;; Major Mode
-(define-derived-mode nand2tetris-assembler-mode prog-mode
+(define-derived-mode -mode prog-mode
   "HACK Assembler"
   "Major mode for the HACK Assembler language.
 
@@ -337,10 +336,11 @@ that when returning the corresponding instruction we use the
   ;;      '(nand2tetris-font-lock-keywords nil nil nil nil))
   )
 
-;;;###autoload
+:autoload
 (add-to-list 'auto-mode-alist
-             `(,(concat (expand-file-name nand2tetris-base-dir) "\.*\\.asm")
-               . nand2tetris-assembler-mode))
+             `(,(concat (expand-file-name nand2tetris-core-base-dir) "\.*\\.asm")
+               . ,#'-mode))
+)
 
 (provide 'nand2tetris-assembler)
 ;;; nand2tetris-assembler.el ends here

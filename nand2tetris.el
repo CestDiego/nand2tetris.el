@@ -9,7 +9,7 @@
 ;; Keywords: nand2tetris, hdl
 ;; Homepage: http://www.github.com/CestDiego/nand2tetris.el/
 ;; Version: 0.0.1
-;; Package-Requires: ((company "0.5") (cl-lib "0.5.0") (yasnippet "0.8.0"))
+;; Package-Requires: ((nand2tetris-core "0.0.1") (yasnippet "0.8.0"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -34,19 +34,18 @@
 ;; See: https://www.coursera.org/course/nand2tetris1
 
 ;;; Code:
+(eval-when-compile (require 'names))
 
-(require 'company-nand2tetris)
+(require 'nand2tetris-core)
+(require 'eldoc)
+(require 'yasnippet)
 (require 'rx)
 
-(defgroup nand2tetris nil
-  "Major Mode for HDL files in (the) Nand2Tetris Course"
-  :group 'nand2tetris)
 
-(defcustom nand2tetris-base-dir nil
-  "Source directory where nadn2tetris has been downloaded."
-  :group 'nand2tetris)
+;;;###autoload
+(define-namespace nand2tetris
 
-(defconst nand2tetris-mode-syntax-table
+(defconst -mode-syntax-table
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?/ ". 124b" table)
     (modify-syntax-entry ?* ". 23" table)
@@ -54,136 +53,134 @@
     table))
 
 
+
 ;;; Scripts Integration
-(defcustom nand2tetris-tools-dir
-  (expand-file-name "tools" nand2tetris-base-dir)
+(defcustom -tools-dir
+  (expand-file-name "tools" nand2tetris-core-base-dir)
   "The directory where the 'tools' (simulator, assembler, etc) are located."
   :group 'nand2tetris)
 
-(defcustom nand2tetris-hardware-simulator (expand-file-name "HardwareSimulator.sh" nand2tetris-tools-dir)
+(defcustom -hardware-simulator (expand-file-name "HardwareSimulator.sh" -tools-dir)
   "Hardware Simulator Launcher."
   :group 'nand2tetris)
 
-(defcustom nand2tetris-assembler (expand-file-name "Assembler.sh" nand2tetris-tools-dir)
+(defcustom -assembler (expand-file-name "Assembler.sh" -tools-dir)
   "Assembler Launcher."
   :group 'nand2tetris)
 
-(defcustom nand2tetris-cpu-emulator (expand-file-name "CPUEmulator.sh" nand2tetris-tools-dir)
+(defcustom -cpu-emulator (expand-file-name "CPUEmulator.sh" -tools-dir)
   "CPU Emulator Launcher."
   :group 'nand2tetris)
 
-(defcustom nand2tetris-jack-compiler (expand-file-name "JackCompiler.sh" nand2tetris-tools-dir)
+(defcustom -jack-compiler (expand-file-name "JackCompiler.sh" -tools-dir)
   "Jack Compiler Launcher."
   :group 'nand2tetris)
 
-(defcustom nand2tetris-text-comparer (expand-file-name "TextComparer.sh" nand2tetris-tools-dir)
+(defcustom -text-comparer (expand-file-name "TextComparer.sh" -tools-dir)
   "Text Comparer Launcher."
   :group 'nand2tetris)
 
-(defcustom nand2tetris-vm-emulator (expand-file-name "VMEmulator.sh" nand2tetris-tools-dir)
+(defcustom -vm-emulator (expand-file-name "VMEmulator.sh" -tools-dir)
   "VM Emulator Launcher."
   :group 'nand2tetris)
 
-(defun nand2tetris/hardware-simulator ()
+(defun /hardware-simulator ()
   "Summmon Hardware Simulator."
   (interactive)
-  (shell-command nand2tetris-hardware-simulator))
+  (shell-command -hardware-simulator))
 
-(defun nand2tetris/assembler ()
+(defun /assembler ()
   "Summon Assembler GUI."
   (interactive)
-  (shell-command nand2tetris-assembler))
+  (shell-command -assembler))
 
-(defun nand2tetris/cpu-emulator ()
+(defun /cpu-emulator ()
   "Summon CPU Emulator GUI."
   (interactive)
-  (shell-command nand2tetris-cpu-emulator))
+  (shell-command -cpu-emulator))
 
-(defun nand2tetris/jack-compiler ()
+(defun /jack-compiler ()
   "Summon Jack Compiler GUI."
   (interactive)
-  (shell-command nand2tetris-jack-compiler))
+  (shell-command -jack-compiler))
 
-(defun nand2tetris/text-comparer ()
+(defun /text-comparer ()
   "Summom the Text Comparer."
   (interactive)
-  (shell-command nand2tetris-text-comparer))
+  (shell-command -text-comparer))
 
-(defun nand2tetris/vm-emulator ()
+(defun /vm-emulator ()
   "Summon the VM Emulator."
   (interactive)
-  (shell-command nand2tetris-vm-emulator))
+  (shell-command -vm-emulator))
 
-(defun nand2tetris//get-test-file (buffer)
-  "Get the test file for BUFFER."
+
+(defun //get-test-file (buffer)
+  "get the test file for buffer."
   (let ((test-file (concat
                     (file-name-sans-extension
                      (with-current-buffer buffer
                        (buffer-file-name))) ".tst")))
     (unless (file-exists-p test-file)
-      (error "Could not find the test file for %s" (buffer-name)))
+      (error "could not find the test file for %s" (buffer-name)))
     test-file))
 
-(defun nand2tetris//get-current-test-file ()
-  "Get the test file for the current buffer."
+(defun //get-current-test-file ()
+  "get the test file for the current buffer."
   (interactive)
   (message
-  (nand2tetris//get-test-file (current-buffer))))
+   (//get-test-file (current-buffer))))
 
-(defun nand2tetris//get-compare-file (buffer)
-  "Get the compare file for BUFFER."
+(defun //get-compare-file (buffer)
+  "get the compare file for buffer."
   (let ((compare-file (concat
-                    (file-name-sans-extension
-                     (with-current-buffer buffer
-                       (buffer-file-name))) ".cmp")))
+                       (file-name-sans-extension
+                        (with-current-buffer buffer
+                          (buffer-file-name))) ".cmp")))
     (unless (file-exists-p compare-file)
-      (error "Could not find the compare file for %s" (buffer-name)))
+      (error "could not find the compare file for %s" (buffer-name)))
     compare-file))
 
-(defun nand2tetris//get-current-compare-file ()
+(defun //get-current-compare-file ()
   "Get the compare file for the current buffer."
   (interactive)
   (message
-   (nand2tetris//get-compare-file (current-buffer))))
+   (//get-compare-file (current-buffer))))
 
-
-(defun nand2tetris/tests-current-hdl ()
+(defun /tests-current-hdl ()
   "Run `HardwareSimulator.sh' on current tst file."
   (interactive)
   (save-buffer)
-  (shell-command (concat
-                  nand2tetris-hardware-simulator " "
-                  (nand2tetris//get-current-test-file))))
+  (shell-command (concat -hardware-simulator " " (//get-current-test-file))))
 
-(defun nand2tetris/tests-current-hdl-elsewhere ()
-  "Run `HardwareSimulator.sh' on current tst file, but on another locaion so it can use the builtin chips."
+(defun /tests-current-hdl-elsewhere ()
+  "Run `HardwareSimulator.sh' on current tst file, but on another locaion.
+So it can use the builtin chips."
   (interactive)
-  (let ((filename (file-name-base (buffer-file-name)))
-        (hdl-buffer (current-buffer))
-        (tst-file (nand2tetris//get-current-test-file))
-        (cmp-file (nand2tetris//get-current-compare-file)))
-
+  (let ((filename      (file-name-base (buffer-file-name)))
+        (hdl-buffer    (current-buffer))
+        (tst-file      (//get-current-test-file))
+        (cmp-file      (//get-current-compare-file)))
     (copy-file tst-file (concat "/tmp/" filename ".tst") t)
     (copy-file cmp-file (concat "/tmp/" filename ".cmp") t)
     (with-temp-file (concat "/tmp/" filename ".hdl")
       (insert-buffer-substring hdl-buffer))
-    (shell-command (concat nand2tetris-hardware-simulator " "
+    (shell-command (concat -hardware-simulator " "
                            (concat "/tmp/" filename ".tst")))))
+
 
 ;;; Bindings
-(defvar nand2tetris-mode-map
+(defvar -mode-map
   (let ((map (make-sparse-keymap)))
     ;;Compile
-    (define-key map "\C-c\C-c" 'nand2tetris/tests-current-hdl-elsewhere)
-    (define-key map "\C-c\C-k" 'nand2tetris/tests-current-hdl)
+    (define-key map "\C-c\C-c" #'/tests-current-hdl-elsewhere)
+    (define-key map "\C-c\C-k" #'/tests-current-hdl)
     map)
-  "Keymap for `nand2tetris-mode'.")
+  "Keymap for `nand2tetris-mode'n.")
 
 
 ;;; ElDoc
-(require 'eldoc)
-
-(defun nand2tetris//get-chip-at-line ()
+(defun //get-chip-at-line ()
   "Gets the chip currently used, so that placing the cursor at
 any point in the line:
    Not16 (in=a, out=out)
@@ -195,34 +192,30 @@ Will return Not16"
          (? space ) "("))
     (match-string 1)))
 
-(defun nand2tetris-eldoc-function ()
+(defun /eldoc-function ()
   "Get help on SYMBOL using `help'.
 Interactively, prompt for symbol."
-  (let ((symbol (nand2tetris//get-chip-at-line))
+  (let ((symbol (//get-chip-at-line))
         (enable-recursive-minibuffers t))
-    (message (cdr (assoc "spec" (assoc symbol nand2tetris-builtin-chips))))))
+    (message (cdr (assoc "spec" (assoc symbol nand2tetris-core-builtin-chips))))))
 
 
 ;;; Yasnippet
-(require 'yasnippet)
-
-(defconst nand2tetris::dir (file-name-directory (or load-file-name
-                                                buffer-file-name)))
-;;;###autoload
-(defun nand2tetris//snippets-initialize ()
+(defconst --source-root-dir (file-name-directory (or load-file-name
+                                                     buffer-file-name)))
+:autoload
+(defun //snippets-initialize ()
   "Initialize snippets directory."
-  (let ((snip-dir (expand-file-name "snippets" nand2tetris::dir)))
+  (let ((snip-dir (expand-file-name "snippets" --source-root-dir)))
     (add-to-list 'yas-snippet-dirs snip-dir t)
     (yas-load-directory snip-dir)))
 
-;;;###autoload
-(eval-after-load 'yasnippet
-  '(nand2tetris//snippets-initialize))
+:autoload
+(eval-after-load 'yasnippet #'(//snippets-initialize))
 
 
 ;;; Indentation
-
-(defun nand2tetris-indent-line ()
+(defun /indent-line ()
   "Indent current line as WPDL code."
   (interactive)
   (beginning-of-line)
@@ -255,16 +248,17 @@ Interactively, prompt for symbol."
         (indent-line-to 0)))))
 
 
-;;; Font-lock and syntax
-(defvar nand2tetris-font-lock-keywords
-  ;;Keywords
-  `(,(rx symbol-start
+;;; Font-Lock and Syntax
+(defvar -font-lock-keywords
+  `(;;Keywords
+    ,(rx symbol-start
          (or "CHIP")
          symbol-end)
     (,(rx symbol-start (group (or "IN" "OUT" "PARTS" "BUILTIN" "CLOCKED")))
      (1 font-lock-variable-name-face))
-    ;; attribute names!
-    (,(rx (group (* word)) (? (seq "[" (* (or digit ?.)) "]")) (* space) ?= (* (or word digit ?-)))
+    ;; Attribute names!
+    (,(rx (group (* word)) (? (seq "[" (* (or digit ?.)) "]"))
+          (* space) ?= (* (or word digit ?-)))
      (1 font-lock-constant-face))
     ;; CHIP <ChipName>
     (,(rx symbol-start (or "CHIP" "BUILTIN") (1+ space) (group (1+ (or word ?_))))
@@ -274,27 +268,29 @@ Interactively, prompt for symbol."
           (? space) "(")
      (1 font-lock-variable-name-face))))
 
-;;;###autoload
-(define-derived-mode nand2tetris-mode prog-mode
+:autoload
+(define-derived-mode -mode prog-mode
   "nand2tetris"
   "Major mode for editing HDL files for the course Nand2Tetris.
 
 \\{nand2tetris-mode-map}"
 
   (set (make-local-variable 'eldoc-documentation-function)
-       #'nand2tetris-eldoc-function)
+       #'/eldoc-function)
 
   (set (make-local-variable 'comment-start) "// ")
   (set (make-local-variable 'comment-start-skip) "//+\\s-*")
-  (set (make-local-variable 'indent-line-function) 'nand2tetris-indent-line)
+  (set (make-local-variable 'indent-line-function) #'/indent-line)
 
   (set (make-local-variable 'font-lock-defaults)
-       '(nand2tetris-font-lock-keywords nil nil nil nil)))
+       `(,-font-lock-keywords nil nil nil nil)))
 
-;;;###autoload
+:autoload
 (add-to-list 'auto-mode-alist
-             `(,(concat (expand-file-name nand2tetris-base-dir) "\.*\\.hdl")
-               . nand2tetris-mode))
+             `(,(concat (expand-file-name nand2tetris-core-base-dir) "\.*\\.hdl")
+               . ,#'-mode))
+
+)
 
 (require 'nand2tetris-assembler)
 
