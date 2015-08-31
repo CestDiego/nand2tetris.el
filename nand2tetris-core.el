@@ -5,11 +5,10 @@
 
 ;; Author: Diego Berrocal <cestdiego@gmail.com>
 ;; Created: 31 August 2015
+;; Package-Requires: ((names "Lookup.Latest.Version") (emacs "24"))
 
 ;; Keywords: nand2tetris, hdl
 ;; Homepage: http://www.github.com/CestDiego/nand2tetris.el/
-;; Version: 0.0.1
-;; Package-Requires: ((emacs "24"))
 
 ;; This file is not part of GNU Emacs.
 

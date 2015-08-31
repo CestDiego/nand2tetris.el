@@ -9,7 +9,7 @@
 ;; Keywords: nand2tetris, hdl
 ;; Homepage: http://www.github.com/CestDiego/nand2tetris.el/
 ;; Version: 0.0.1
-;; Package-Requires: ((nand2tetris-core "0.0.1") (yasnippet "0.8.0"))
+;; Package-Requires: ((names "Lookup.Latest.Version") (yasnippet "0.8.0"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -291,8 +291,6 @@ Interactively, prompt for symbol."
                . ,#'-mode))
 
 )
-
-(require 'nand2tetris-assembler)
 
 (provide 'nand2tetris)
 ;;; nand2tetris.el ends here

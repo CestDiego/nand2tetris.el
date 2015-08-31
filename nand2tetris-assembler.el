@@ -9,7 +9,7 @@
 ;; Keywords: nand2tetris-assembler, hdl
 ;; Homepage: http://www.github.com/CestDiego/nand2tetris-assembler.el/
 ;; Version: 0.0.1
-;; Package-Requires: ((nand2tetris-core "0.0.1"))
+;; Package-Requires: ((names "Lookup.Latest.Version") (nand2tetris "0.0.1"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -37,7 +37,7 @@
 
 (eval-when-compile (require 'names))
 
-(require 'nand2tetris-core)
+(require 'nand2tetris)
 
 ;;;###autoload
 (define-namespace nand2tetris-assembler
