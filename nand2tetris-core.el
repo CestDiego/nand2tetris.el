@@ -46,7 +46,7 @@
   "Source directory where nadn2tetris has been downloaded."
   :group 'nand2tetris)
 
-(defvar -builtin-chips
+(defconst -builtin-chips
   '(("Add16" . (("description" .
                  "16-bit bitwise And:
 
