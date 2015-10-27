@@ -42,7 +42,7 @@
 ;;;###autoload
 (define-namespace nand2tetris-core
 
-(defcustom -base-dir nil
+(defcustom -base-dir "~/Downloads/nand2tetris"
   "Source directory where nadn2tetris has been downloaded."
   :group 'nand2tetris)
 
