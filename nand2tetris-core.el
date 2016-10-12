@@ -5,7 +5,6 @@
 
 ;; Author: Diego Berrocal <cestdiego@gmail.com>
 ;; Created: 31 August 2015
-;; Package-Requires: ((names "0.3.0") (emacs "24"))
 
 ;; Keywords: nand2tetris, hdl
 ;; Homepage: http://www.github.com/CestDiego/nand2tetris.el/
