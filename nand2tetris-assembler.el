@@ -300,14 +300,14 @@ that when returning the corresponding instruction we use the
                             ".hack"))
          (instructions     (/replace-variables digested-lines)))
     (with-temp-file filename
-      (mapcar #'/process instructions))))
+      (mapcar #'nand2tetris-assembler/process instructions))))
 
 
 ;;; Bindings
 (defvar -mode-map
   (let ((map (make-sparse-keymap)))
     ;;Compile
-    (define-key map "\C-c\C-c" #'/init)
+    (define-key map "\C-c\C-c" #'nand2tetris-assembler/init)
     map)
   "Keymap for `nand2tetris-assembler-mode'.")
 
@@ -336,7 +336,7 @@ that when returning the corresponding instruction we use the
   ;;      '(nand2tetris-font-lock-keywords nil nil nil nil))
   )
 
-:autoload
+;;;###autoload
 (add-to-list 'auto-mode-alist
              `(,(concat (expand-file-name nand2tetris-core-base-dir) "\.*\\.asm")
                . ,#'-mode))
