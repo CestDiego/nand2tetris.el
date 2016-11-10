@@ -169,8 +169,8 @@ So it can use the builtin chips."
 (defvar nand2tetris-mode-map
   (let ((map (make-sparse-keymap)))
     ;;Compile
-    (define-key map "\C-c\C-c" #'/tests-current-hdl-elsewhere)
-    (define-key map "\C-c\C-k" #'/tests-current-hdl)
+    (define-key map "\C-c\C-c" #'nand2tetris/tests-current-hdl-elsewhere)
+    (define-key map "\C-c\C-k" #'nand2tetris/tests-current-hdl)
     map)
   "Keymap for `nand2tetris-mode'n.")
 
@@ -199,14 +199,14 @@ Interactively, prompt for symbol."
 ;;; Yasnippet
 (defconst nand2tetris--source-root-dir (file-name-directory (or load-file-name
                                                      buffer-file-name)))
-:autoload
+;;;###autoload
 (defun nand2tetris//snippets-initialize ()
   "Initialize snippets directory."
   (let ((snip-dir (expand-file-name "snippets" nand2tetris--source-root-dir)))
     (add-to-list 'yas-snippet-dirs snip-dir t)
     (yas-load-directory snip-dir)))
 
-:autoload
+;;;###autoload
 (eval-after-load 'yasnippet #'(nand2tetris//snippets-initialize))
 
 
@@ -264,7 +264,7 @@ Interactively, prompt for symbol."
           (? space) "(")
      (1 font-lock-variable-name-face))))
 
-:autoload
+;;;###autoload
 (define-derived-mode nand2tetris-mode prog-mode
   "nand2tetris"
   "Major mode for editing HDL files for the course Nand2Tetris.
@@ -272,19 +272,19 @@ Interactively, prompt for symbol."
 \\{nand2tetris-mode-map}"
 
   (set (make-local-variable 'eldoc-documentation-function)
-       #'/eldoc-function)
+       #'nand2tetris/eldoc-function)
 
   (set (make-local-variable 'comment-start) "// ")
   (set (make-local-variable 'comment-start-skip) "//+\\s-*")
   (set (make-local-variable 'indent-line-function) #'nand2tetris/indent-line)
 
   (set (make-local-variable 'font-lock-defaults)
-       `(,-font-lock-keywords nil nil nil nil)))
+       `(,nand2tetris-font-lock-keywords nil nil nil nil)))
 
-:autoload
+;;;###autoload
 (add-to-list 'auto-mode-alist
              `(,(concat (expand-file-name nand2tetris-core-base-dir) "\.*\\.hdl")
-               . ,#'-mode))
+               . 'nand2tetris-mode))
 
 
 (provide 'nand2tetris)
