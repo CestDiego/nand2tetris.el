@@ -5,7 +5,6 @@
 
 ;; Author: Diego Berrocal <cestdiego@gmail.com>
 ;; Created: 31 August 2015
-;; Package-Requires: ((names "0.3.0") (emacs "24"))
 
 ;; Keywords: nand2tetris, hdl
 ;; Homepage: http://www.github.com/CestDiego/nand2tetris.el/
@@ -33,20 +32,15 @@
 ;; See: https://www.coursera.org/course/nand2tetris1
 
 ;;; Code:
-(eval-when-compile (require 'names))
-
 (defgroup nand2tetris nil
   "Major Mode for HDL files in (the) Nand2Tetris Course"
   :group 'nand2tetris)
 
-;;;###autoload
-(define-namespace nand2tetris-core
-
-(defcustom -base-dir "~/Downloads/nand2tetris"
+(defcustom nand2tetris-core-base-dir "~/Downloads/nand2tetris"
   "Source directory where nadn2tetris has been downloaded."
   :group 'nand2tetris)
 
-(defconst -builtin-chips
+(defconst nand2tetris-core-builtin-chips
   '(("Add16" . (("description" .
                  "16-bit bitwise And:
 
@@ -73,7 +67,7 @@ OUT
     ng; // 1 if (out < 0),  0 otherwise
 
 Computes one of the following functions:
-x+y, x-y, y-x, 0, 1, -1, x, y, -x, -y, !x, !y,
+x+y, x-y, y-x, 0, 1, nand2tetris-core-1, x, y, nand2tetris-core-x, nand2tetris-core-y, !x, !y,
 x+1, y+1, x-1, y-1, x&y, x|y on two 16-bit inputs,
 according to 6 input bits denoted zx,nx,zy,ny,f,no.
 In addition, the ALU computes two 1-bit outputs:
@@ -505,7 +499,6 @@ OUT out;
 out = !(a == b).")
               ("spec" . "Xor(a= ,b= ,out= )"))))
   "Built In Chips Alist.")
-)
 
 (provide 'nand2tetris-core)
 ;;; nand2tetris-core.el ends here

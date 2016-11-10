@@ -8,8 +8,8 @@
 
 ;; Keywords: nand2tetris, hdl, company
 ;; Homepage: http://www.github.com/CestDiego/nand2tetris.el/
-;; Version: 0.0.1
-;; Package-Requires: ((names "0.3.0") (nand2tetris "0.0.1") (company "0.5") (cl-lib "0.5.0"))
+;; Version: 1.0.0
+;; Package-Requires: ((nand2tetris "1.0.0") (company "0.5") (cl-lib "0.5.0"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -34,15 +34,11 @@
 ;; See: https://www.coursera.org/course/nand2tetris1
 
 ;;; Code:
-(eval-when-compile (require 'names))
 (require 'nand2tetris)
 (require 'company)
 (require 'cl-lib)
 
-;;;###autoload
-(define-namespace company-nand2tetris
-
-(defun /candidates (prefix)
+(defun company-nand2tetris/candidates (prefix)
   "Gather Candidates from `nand2tetris-core-builtin-chips' that match PREFIX."
   (let ((res))
     (dolist (option nand2tetris-core-builtin-chips)
@@ -51,7 +47,7 @@
           (push name res))))
     res))
 
-(defun /display-doc-buffer (candidate)
+(defun company-nand2tetris/display-doc-buffer (candidate)
   "Return documentation buffer for chosen CANDIDATE."
   (let ((buf (get-buffer-create "*company-nand2tetris-doc*"))
         (doc (cdr (assoc "description"
@@ -65,22 +61,20 @@
         (view-mode 1)
         buf))))
 
-(defun /get-annotation (candidate)
+(defun company-nand2tetris/get-annotation (candidate)
   "Get the specification of the chip defined by CANDIDATE as annotated text."
   (let ((spec (cdr (assoc "spec" (assoc candidate nand2tetris-core-builtin-chips)))))
     (format "    %s" spec)))
 
-(defun /grab-symbol ()
+(defun company-nand2tetris/grab-symbol ()
   "Grab last symbol with a dotty syntax."
   (buffer-substring (point) (save-excursion (skip-syntax-backward "w_.")
                                                 (point))))
 
-(defun /grab-prefix ()
+(defun company-nand2tetris/grab-prefix ()
   "Grab prefix at point."
-  (or (/grab-symbol)
+  (or (company-nand2tetris/grab-symbol)
       'stop))
-
-)
 
 ;;;###autoload
 (defun company-nand2tetris (command &optional arg &rest ignored)
