@@ -81,35 +81,46 @@
   :group 'nand2tetris)
 
 (defun nand2tetris/hardware-simulator ()
-  "Summmon Hardware Simulator."
+  "Start Hardware Simulator.
+
+See URL `http://www.nand2tetris.org/software.php'."
   (interactive)
-  (shell-command nand2tetris-hardware-simulator))
+  (call-process-shell-command nand2tetris-hardware-simulator))
 
 (defun nand2tetris/assembler ()
-  "Summon Assembler GUI."
+  "Start Assembler GUI.
+
+See URL `http://www.nand2tetris.org/software.php'."
   (interactive)
-  (shell-command nand2tetris-assembler))
+  (call-process-shell-command nand2tetris-assembler))
 
 (defun nand2tetris/cpu-emulator ()
-  "Summon CPU Emulator GUI."
+  "Start CPU Emulator GUI.
+
+See URL `http://www.nand2tetris.org/software.php'."
   (interactive)
-  (shell-command nand2tetris-cpu-emulator))
+  (call-process-shell-command nand2tetris-cpu-emulator))
 
 (defun nand2tetris/jack-compiler ()
-  "Summon Jack Compiler GUI."
+  "Start Jack Compiler GUI.
+
+See URL `http://www.nand2tetris.org/software.php'."
   (interactive)
-  (shell-command nand2tetris-jack-compiler))
+  (call-process-shell-command nand2tetris-jack-compiler))
 
 (defun nand2tetris/text-comparer ()
-  "Summom the Text Comparer."
+  "Summom Text Comparer.
+
+See URL `http://www.nand2tetris.org/software.php'."
   (interactive)
-  (shell-command nand2tetris-text-comparer))
+  (call-process-shell-command nand2tetris-text-comparer))
 
 (defun nand2tetris/vm-emulator ()
-  "Summon the VM Emulator."
-  (interactive)
-  (shell-command nand2tetris-vm-emulator))
+  "Start VM Emulator.
 
+See URL `http://www.nand2tetris.org/software.php'."
+  (interactive)
+  (call-process-shell-command nand2tetris-vm-emulator))
 
 (defun nand2tetris//get-test-file (buffer)
   "get the test file for buffer."
@@ -216,7 +227,7 @@ Interactively, prompt for symbol."
   (interactive)
   (beginning-of-line)
   (if (bobp)
-      (indent-line-to 0)		   ; First line is always non-indented
+      (indent-line-to 0)                   ; First line is always non-indented
     (let ((not-indented t) cur-indent)
       (if (looking-at "^[ \t]*}") ; If the line we are looking at is the end of a block, then decrease the indentation
           (progn
