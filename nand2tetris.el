@@ -83,33 +83,33 @@
 (defun nand2tetris/hardware-simulator ()
   "Summmon Hardware Simulator."
   (interactive)
-  (shell-command nand2tetris-hardware-simulator))
+  (call-process-shell-command nand2tetris-hardware-simulator))
 
 (defun nand2tetris/assembler ()
   "Summon Assembler GUI."
   (interactive)
-  (shell-command nand2tetris-assembler))
+  (call-process-shell-command nand2tetris-assembler))
 
 (defun nand2tetris/cpu-emulator ()
   "Summon CPU Emulator GUI."
   (interactive)
-  (shell-command nand2tetris-cpu-emulator))
+  (call-process-shell-command nand2tetris-cpu-emulator))
 
 (defun nand2tetris/jack-compiler ()
   "Summon Jack Compiler GUI."
   (interactive)
-  (shell-command nand2tetris-jack-compiler))
+  (call-process-shell-command nand2tetris-jack-compiler))
 
 (defun nand2tetris/text-comparer ()
   "Summom the Text Comparer."
   (interactive)
-  (shell-command nand2tetris-text-comparer))
+  (call-process-shell-command nand2tetris-text-comparer))
 
 (defun nand2tetris/vm-emulator ()
   "Summon the VM Emulator."
   (interactive)
-  (shell-command nand2tetris-vm-emulator))
 
+  (call-process-shell-command nand2tetris-vm-emulator))
 
 (defun nand2tetris//get-test-file (buffer)
   "get the test file for buffer."
