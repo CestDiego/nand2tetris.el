@@ -228,7 +228,9 @@ Interactively, prompt for symbol."
   (beginning-of-line)
   (if (bobp)
       (indent-line-to 0)                   ; First line is always non-indented
-    (let ((not-indented t) cur-indent)
+    (let ((not-indented t)
+          (cur-indent 0)
+          (nand2tetris-1 -1))
       (if (looking-at "^[ \t]*}") ; If the line we are looking at is the end of a block, then decrease the indentation
           (progn
             (save-excursion
@@ -239,11 +241,11 @@ Interactively, prompt for symbol."
         (save-excursion
           (while not-indented ; Iterate backwards until we find an indentation hint
             (forward-line nand2tetris-1)
-            (if (looking-at "^[ \t]*}") ; This hint indicates that we need to indent at the level of the END_ token
+            (if (looking-at "^[ \t]*.*[})]") ; This hint indicates that we need to indent at the level of the END_ token
                 (progn
                   (setq cur-indent (current-indentation))
                   (setq not-indented nil))
-              (if (looking-at "^[ \t]*\\(CHIP\\)") ; This hint indicates that we need to indent an extra level
+              (if (looking-at "^[ \t]*.*[({]$") ; This hint indicates that we need to indent an extra level
                   (progn
                     (setq cur-indent (+ (current-indentation) tab-width)) ; Do the actual indenting
                     (setq not-indented nil))
