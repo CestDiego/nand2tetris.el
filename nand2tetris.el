@@ -170,16 +170,18 @@ See URL `http://www.nand2tetris.org/software.php'."
   "Run `HardwareSimulator.sh' on current tst file, but on another locaion.
 So it can use the builtin chips."
   (interactive)
-  (let ((filename      (file-name-base (buffer-file-name)))
-        (hdl-buffer    (current-buffer))
-        (tst-file      (nand2tetris//get-current-test-file))
-        (cmp-file      (nand2tetris//get-current-compare-file)))
-    (copy-file tst-file (concat "/tmp/" filename ".tst") t)
-    (copy-file cmp-file (concat "/tmp/" filename ".cmp") t)
-    (with-temp-file (concat "/tmp/" filename ".hdl")
+  (let* ((filename          (file-name-base (buffer-file-name)))
+         (hdl-buffer        (current-buffer))
+         (tst-file          (nand2tetris//get-current-test-file))
+         (cmp-file          (nand2tetris//get-current-compare-file))
+         (should-create-dir t)
+         (temp-dir          (file-name-as-directory (make-temp-file "nand2tetris-el" should-create-dir))))
+    (copy-file tst-file (expand-file-name (concat filename ".tst") temp-dir) t)
+    (copy-file cmp-file (expand-file-name (concat filename ".cmp") temp-dir) t)
+    (with-temp-file (concat temp-dir filename ".hdl")
       (insert-buffer-substring hdl-buffer))
     (shell-command (concat (nand2tetris-hardware-simulator) " "
-                           (concat "/tmp/" filename ".tst")))))
+                           (expand-file-name (concat filename ".tst") temp-dir)))))
 
 
 ;;; Bindings
