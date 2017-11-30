@@ -7,6 +7,9 @@ nand2tetris journey [[https://www.coursera.org/course/nand2tetris1][in Coursera]
 
  ~Only works on Linux/OSX...for now~ 
 
+**  Getting Started
+
+Set the path to your nand2tetris directory with e.g. =(setq nand2tetris-core-base-dir "~/nand2tetris")=.
 
 
 ** Goodies
