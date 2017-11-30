@@ -202,10 +202,12 @@ any point in the line:
 Will return Not16"
   (save-excursion
     (beginning-of-line)
-    (search-forward-regexp
-     (rx (group (* word))
-         (? space ) "("))
-    (match-string 1)))
+    (when (search-forward-regexp
+           (rx (group (* word))
+               (? space ) "(")
+           nil
+           t)
+      (match-string 1))))
 
 (defun nand2tetris/eldoc-function ()
   "Get help on SYMBOL using `help'.
