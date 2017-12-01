@@ -8,8 +8,8 @@
 
 ;; Keywords: nand2tetris, hdl, company
 ;; Homepage: http://www.github.com/CestDiego/nand2tetris.el/
-;; Version: 1.0.0
-;; Package-Requires: ((nand2tetris "1.0.0") (company "0.5") (cl-lib "0.5.0"))
+;; Version: 1.1.0
+;; Package-Requires: ((nand2tetris "1.1.0") (company "0.5") (cl-lib "0.5.0"))
 
 ;; This file is not part of GNU Emacs.
 

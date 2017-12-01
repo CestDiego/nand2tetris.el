@@ -8,7 +8,7 @@
 
 ;; Keywords: nand2tetris, hdl
 ;; Homepage: http://www.github.com/CestDiego/nand2tetris.el/
-;; Version: 1.0.0
+;; Version: 1.1.0
 ;; Package-Requires: ((emacs "24"))
 
 ;; This file is not part of GNU Emacs.
@@ -51,76 +51,82 @@
 
 
 ;;; Scripts Integration
-(defcustom nand2tetris-tools-dir
-  (expand-file-name "tools" nand2tetris-core-base-dir)
+(defcustom nand2tetris-tools-dir nil
   "The directory where the 'tools' (simulator, assembler, etc) are located."
   :group 'nand2tetris)
+(defun nand2tetris-tools-dir () (or nand2tetris-tools-dir (expand-file-name "tools" nand2tetris-core-base-dir)))
 
-(defcustom nand2tetris-hardware-simulator (expand-file-name "HardwareSimulator.sh" nand2tetris-tools-dir)
+(defcustom nand2tetris-hardware-simulator nil
   "Hardware Simulator Launcher."
   :group 'nand2tetris)
+(defun nand2tetris-hardware-simulator () (or nand2tetris-hardware-simulator (expand-file-name "HardwareSimulator.sh" (nand2tetris-tools-dir))))
 
-(defcustom nand2tetris-assembler (expand-file-name "Assembler.sh" nand2tetris-tools-dir)
+(defcustom nand2tetris-assembler nil
   "Assembler Launcher."
   :group 'nand2tetris)
+(defun nand2tetris-assembler nil () (or nand2tetris-assembler nil (expand-file-name "HardwareSimulator.sh" (nand2tetris-tools-dir))))
 
-(defcustom nand2tetris-cpu-emulator (expand-file-name "CPUEmulator.sh" nand2tetris-tools-dir)
+(defcustom nand2tetris-cpu-emulator nil
   "CPU Emulator Launcher."
   :group 'nand2tetris)
+(defun nand2tetris-cpu-emulator () (or nand2tetris-cpu-emulator (expand-file-name "CPUEmulator.sh" (nand2tetris-tools-dir))))
 
-(defcustom nand2tetris-jack-compiler (expand-file-name "JackCompiler.sh" nand2tetris-tools-dir)
+(defcustom nand2tetris-jack-compiler nil
   "Jack Compiler Launcher."
   :group 'nand2tetris)
+(defun nand2tetris-jack-compiler () (or nand2tetris-jack-compiler (expand-file-name "JackCompiler.sh" (nand2tetris-tools-dir))))
 
-(defcustom nand2tetris-text-comparer (expand-file-name "TextComparer.sh" nand2tetris-tools-dir)
+(defcustom nand2tetris-text-comparer nil
   "Text Comparer Launcher."
   :group 'nand2tetris)
+(defun nand2tetris-text-comparer () (or nand2tetris-text-comparer (expand-file-name "TextComparer.sh" (nand2tetris-tools-dir))))
 
-(defcustom nand2tetris-vm-emulator (expand-file-name "VMEmulator.sh" nand2tetris-tools-dir)
+(defcustom nand2tetris-vm-emulator nil
   "VM Emulator Launcher."
   :group 'nand2tetris)
+(defun nand2tetris-vm-emulator () (or nand2tetris-vm-emulator (expand-file-name "VMEmulator.sh" (nand2tetris-tools-dir))))
 
 (defun nand2tetris/hardware-simulator ()
   "Start Hardware Simulator.
 
 See URL `http://www.nand2tetris.org/software.php'."
   (interactive)
-  (call-process-shell-command nand2tetris-hardware-simulator))
+  (call-process-shell-command (nand2tetris-hardware-simulator)))
 
 (defun nand2tetris/assembler ()
   "Start Assembler GUI.
 
 See URL `http://www.nand2tetris.org/software.php'."
   (interactive)
-  (call-process-shell-command nand2tetris-assembler))
+  (call-process-shell-command (nand2tetris-assembler)))
 
 (defun nand2tetris/cpu-emulator ()
   "Start CPU Emulator GUI.
 
 See URL `http://www.nand2tetris.org/software.php'."
   (interactive)
-  (call-process-shell-command nand2tetris-cpu-emulator))
+  (call-process-shell-command (nand2tetris-cpu-emulator)))
 
 (defun nand2tetris/jack-compiler ()
   "Start Jack Compiler GUI.
 
 See URL `http://www.nand2tetris.org/software.php'."
   (interactive)
-  (call-process-shell-command nand2tetris-jack-compiler))
+  (call-process-shell-command (nand2tetris-jack-compiler)))
 
 (defun nand2tetris/text-comparer ()
   "Summom Text Comparer.
 
 See URL `http://www.nand2tetris.org/software.php'."
   (interactive)
-  (call-process-shell-command nand2tetris-text-comparer))
+  (call-process-shell-command (nand2tetris-text-comparer)))
 
 (defun nand2tetris/vm-emulator ()
   "Start VM Emulator.
 
 See URL `http://www.nand2tetris.org/software.php'."
   (interactive)
-  (call-process-shell-command nand2tetris-vm-emulator))
+  (call-process-shell-command (nand2tetris-vm-emulator)))
 
 (defun nand2tetris//get-test-file (buffer)
   "get the test file for buffer."
@@ -158,22 +164,24 @@ See URL `http://www.nand2tetris.org/software.php'."
   "Run `HardwareSimulator.sh' on current tst file."
   (interactive)
   (save-buffer)
-  (shell-command (concat nand2tetris-hardware-simulator " " (nand2tetris//get-current-test-file))))
+  (shell-command (concat (nand2tetris-hardware-simulator) " " (nand2tetris//get-current-test-file))))
 
 (defun nand2tetris/tests-current-hdl-elsewhere ()
   "Run `HardwareSimulator.sh' on current tst file, but on another locaion.
 So it can use the builtin chips."
   (interactive)
-  (let ((filename      (file-name-base (buffer-file-name)))
-        (hdl-buffer    (current-buffer))
-        (tst-file      (nand2tetris//get-current-test-file))
-        (cmp-file      (nand2tetris//get-current-compare-file)))
-    (copy-file tst-file (concat "/tmp/" filename ".tst") t)
-    (copy-file cmp-file (concat "/tmp/" filename ".cmp") t)
-    (with-temp-file (concat "/tmp/" filename ".hdl")
+  (let* ((filename          (file-name-base (buffer-file-name)))
+         (hdl-buffer        (current-buffer))
+         (tst-file          (nand2tetris//get-current-test-file))
+         (cmp-file          (nand2tetris//get-current-compare-file))
+         (should-create-dir t)
+         (temp-dir          (file-name-as-directory (make-temp-file "nand2tetris-el" should-create-dir))))
+    (copy-file tst-file (expand-file-name (concat filename ".tst") temp-dir) t)
+    (copy-file cmp-file (expand-file-name (concat filename ".cmp") temp-dir) t)
+    (with-temp-file (concat temp-dir filename ".hdl")
       (insert-buffer-substring hdl-buffer))
-    (shell-command (concat nand2tetris-hardware-simulator " "
-                           (concat "/tmp/" filename ".tst")))))
+    (shell-command (concat (nand2tetris-hardware-simulator) " "
+                           (expand-file-name (concat filename ".tst") temp-dir)))))
 
 
 ;;; Bindings
@@ -194,10 +202,12 @@ any point in the line:
 Will return Not16"
   (save-excursion
     (beginning-of-line)
-    (search-forward-regexp
-     (rx (group (* word))
-         (? space ) "("))
-    (match-string 1)))
+    (when (search-forward-regexp
+           (rx (group (* word))
+               (? space ) "(")
+           nil
+           t)
+      (match-string 1))))
 
 (defun nand2tetris/eldoc-function ()
   "Get help on SYMBOL using `help'.
