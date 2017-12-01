@@ -26,3 +26,6 @@ running:
 And printing the result in the modeline, it looks like this:
 
 [[file:img/test-current-hdl.png]]
+
+** Contributors
+- @davidshepherd7 
