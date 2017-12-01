@@ -8,7 +8,7 @@
 
 ;; Keywords: nand2tetris, hdl
 ;; Homepage: http://www.github.com/CestDiego/nand2tetris.el/
-;; Version: 1.0.0
+;; Version: 1.1.0
 ;; Package-Requires: ((emacs "24"))
 
 ;; This file is not part of GNU Emacs.
